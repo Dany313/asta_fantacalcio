@@ -1,0 +1,12 @@
+[
+  {
+    "nome": "lega1",
+    "partecipanti" : [
+      {
+        "nome": "Tizio1",
+        "budget": 500,
+        "giocatori": []
+      }
+    ]
+  }
+]
