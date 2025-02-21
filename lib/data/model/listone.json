@@ -1,0 +1,22 @@
+[
+  {
+    "Id": 572,
+    "R": "P",
+    "Nome": "Meret",
+    "Squadra": "Napoli",
+    "Qt.A": 19,
+    "Qt.I": 15,
+    "Diff.": 4,
+    "FVM": 95
+  },
+  {
+    "Id": 2170,
+    "R": "P",
+    "Nome": "Milinkovic-Savic V.",
+    "Squadra": "Torino",
+    "Qt.A": 18,
+    "Qt.I": 10,
+    "Diff.": 8,
+    "FVM": 60
+  }
+]
