@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../data/model/giocatore.dart';
-import '../data/model/lega.dart';
+import '../model/lega.dart';
+
 
 class LegheRepository {
   // Carica le leghe dal file

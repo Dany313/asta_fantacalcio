@@ -3,7 +3,7 @@ import 'giocatore.dart';
 class Partecipante{
   final String nome;
   final int budget;
-  final List<Giocatore> giocatori;
+  final Map<String,int> giocatori;
 
   Partecipante({
     required this.nome,
@@ -15,9 +15,8 @@ class Partecipante{
     return Partecipante(
       nome: json['nome'] as String,
       budget: json['budget'] as int,
-      giocatori: (json['giocatori'] as List<dynamic>)
-        .map((item) => Giocatore.fromJson(item))
-        .toList(),
+        giocatori: (json['giocatori'] as Map<String, dynamic>).map(
+          (key, value) => MapEntry(key, value as int),)
     );
   }
 
@@ -25,7 +24,7 @@ class Partecipante{
     return {
       'nome': nome,
       'budget': budget,
-      'giocatori': giocatori.map((p) => p.toJson()).toList(),
+      'giocatori': giocatori
     };
   }
 }

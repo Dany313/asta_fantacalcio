@@ -1,10 +1,13 @@
+
 import 'package:flutter/cupertino.dart';
 
-import '../../../data/model/lega.dart';
+
 import '../../../repositories/leghe_repository.dart';
+import '../model/lega.dart';
+
 
 class HomeViewModel extends ChangeNotifier {
-  final LegheRepository _repository = LegheRepository();
+  final LegheRepository _legheRepository = LegheRepository();
   List<Lega> _leghe = [];
 
   List<Lega> get leghe => _leghe;
@@ -13,25 +16,20 @@ class HomeViewModel extends ChangeNotifier {
     fetchLeghe();
   }
 
-  // Carica le leghe dal repository
   Future<void> fetchLeghe() async {
-    _leghe = await _repository.getLeghe();
+    _leghe = await _legheRepository.getLeghe();
     notifyListeners();
   }
 
-  // Aggiungi una lega e salva su file
+
   Future<void> aggiungiLega(Lega nuovaLega) async {
-    _leghe.add(nuovaLega); // Aggiungi alla lista locale
-    print(_leghe);
-    print(leghe);
+    _leghe.add(nuovaLega);
     notifyListeners();
   }
 
-  // Rimuovi una lega e salva su file
+
   Future<void> rimuoviLega(Lega lega) async {
-    _leghe.remove(lega); // Rimuovi dalla lista locale
-    await _repository.saveLeghe(_leghe); // Salva la lista aggiornata
+    _leghe.remove(lega);
     notifyListeners();
-    fetchLeghe();
   }
 }
