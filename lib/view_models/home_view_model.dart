@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../../../data/model/lega.dart';
-import '../../../data/model/repositories/leghe_repository.dart';
+import '../../../repositories/leghe_repository.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final LegheRepository _repository = LegheRepository();
@@ -22,7 +22,6 @@ class HomeViewModel extends ChangeNotifier {
   // Aggiungi una lega e salva su file
   Future<void> aggiungiLega(Lega nuovaLega) async {
     _leghe.add(nuovaLega); // Aggiungi alla lista locale
-    await _repository.addLega(nuovaLega); // Salva nel file
     print(_leghe);
     print(leghe);
     notifyListeners();

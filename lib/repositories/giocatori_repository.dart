@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import '../giocatore.dart';
+import '../data/model/giocatore.dart';
 
 class GiocatoriRepository {
 
