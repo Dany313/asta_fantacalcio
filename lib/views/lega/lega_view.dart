@@ -3,15 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/lega.dart';
 import '../../model/partecipante.dart';
 
 class LegaView extends StatelessWidget {
-  const LegaView({super.key});
+  final Lega lega;
+  const LegaView({super.key, required this.lega});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LegaViewModel>(
-        create: (_) => LegaViewModel(),
+        create: (_) => LegaViewModel(lega),
         builder: (context, child) {
           return Scaffold(
             appBar: AppBar(title: Text("Lega")),

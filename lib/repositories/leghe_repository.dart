@@ -1,42 +1,77 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../model/lega.dart';
+import '../model/partecipante.dart';
 
 
 class LegheRepository {
-  // Carica le leghe dal file
-  Future<List<Lega>> getLeghe() async {
-    final String response = await rootBundle.loadString('lib/data/leghe.json');
-    final List<dynamic> data = json.decode(response);
-    return data.map((json) => Lega.fromJson(json)).toList();
+
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+
+    return directory.path;
   }
 
-  // Aggiungi una lega e salva su file
-  Future<void> addLega(Lega lega) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/leghe.json');
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/leghe.json');
+  }
 
-    // Carica le leghe attuali dal file
+  Future<List<Lega>> getLeghe() async {
+    try {
+      final file = await _localFile;
+      final contents = await file.readAsString();
+      final List<dynamic> data = json.decode(contents);
+      return data.map((json) => Lega.fromJson(json)).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> addLega(Lega lega) async {
+    final file = await _localFile;
     final String response = await file.readAsString();
     final List<dynamic> data = json.decode(response);
 
-    // Aggiungi la nuova lega
-    data.add(lega.toJson()); // Assicurati che il modello 'Lega' abbia un metodo toJson
-
-    // Salva i dati aggiornati nel file
+    data.add(lega.toJson());
     await file.writeAsString(json.encode(data));
   }
 
-  // Salva tutte le leghe nel file
   Future<void> saveLeghe(List<Lega> leghe) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final file = File('${directory.path}/leghe.json');
-
-    // Converte la lista di leghe in JSON e salva
+    final file = await _localFile;
     await file.writeAsString(json.encode(leghe.map((e) => e.toJson()).toList()));
+  }
+
+  Future<List<Partecipante>> getPartecipanti(String nomeLega) async {
+    List<Lega> legheList =  await getLeghe();
+    return legheList.firstWhere((e) => e.nome == nomeLega).partecipanti;
+
+  }
+
+  Future<void> addPartecipante(String nomeLega,Partecipante newPartecipante) async {
+    List<Lega> legheList =  await getLeghe();
+    legheList.firstWhere((e) => e.nome == nomeLega).partecipanti.add(newPartecipante);
+    await saveLeghe(legheList);
+  }
+
+  Future<void> removePartecipante(String nomeLega,Partecipante partecipante) async {
+    List<Lega> legheList =  await getLeghe();
+    legheList.firstWhere((e) => e.nome == nomeLega).partecipanti.remove(partecipante);
+    await saveLeghe(legheList);
+  }
+
+  Future<void> savePartecipanti(String nomeLega,List<Partecipante> partecipanti) async {
+    List<Lega> legheList =  await getLeghe();
+    legheList.firstWhere((e) => e.nome == nomeLega).partecipanti = partecipanti;
+    await saveLeghe(legheList);
+  }
+
+  Future<void> updateLega(Lega lega) async {
+    List<Lega> legheList =  await getLeghe();
+    legheList.remove(lega);
+    legheList.add(lega);
+    await saveLeghe(legheList);
   }
 }

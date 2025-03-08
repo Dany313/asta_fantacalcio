@@ -11,6 +11,16 @@ class Partecipante{
     required this.giocatori
   });
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! Partecipante) return false;
+    return other.nome == nome;
+  }
+
+  @override
+  int get hashCode => nome.hashCode;
+
   factory Partecipante.fromJson(Map<String, dynamic> json) {
     return Partecipante(
       nome: json['nome'] as String,

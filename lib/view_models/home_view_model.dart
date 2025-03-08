@@ -21,15 +21,15 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  Future<void> aggiungiLega(Lega nuovaLega) async {
-    _leghe.add(nuovaLega);
+  Future<void> aggiungiLega(Lega lega) async {
+    _leghe.add(lega);
     notifyListeners();
+    await _legheRepository.saveLeghe(_leghe);
   }
-
 
   Future<void> rimuoviLega(Lega lega) async {
     _leghe.remove(lega);
     notifyListeners();
+    await _legheRepository.saveLeghe(_leghe);
   }
 }

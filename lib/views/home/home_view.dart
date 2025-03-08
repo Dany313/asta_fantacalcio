@@ -26,7 +26,7 @@ class HomeView extends StatelessWidget {
               onTap: (){
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => LegaView()),
+                  MaterialPageRoute(builder: (context) => LegaView(lega: lega,)),
                 );
               },
             );
