@@ -6,7 +6,8 @@ import 'package:flutter/cupertino.dart';
 import '../repositories/giocatori_repository.dart';
 
 class PartecipanteViewModel extends ChangeNotifier {
-  final Map<String, Giocatore> _listoneGiocatori;
+  final GiocatoriRepository _giocatoriRepository = GiocatoriRepository();
+   Map<String, Giocatore> _listoneGiocatori = {};
   late final Partecipante _partecipante;
   late int budget = 0;
   late int puntataMax = 0;
@@ -17,14 +18,15 @@ class PartecipanteViewModel extends ChangeNotifier {
 
   Partecipante get partecipante => _partecipante;
 
-  PartecipanteViewModel(this._partecipante,this._listoneGiocatori) {
+  PartecipanteViewModel(this._partecipante) {
     _partecipante.giocatori.addAll({'Lookman' :100});
     _partecipante.giocatori.addAll({'Pinamonti' :100});
     _partecipante.giocatori.addAll({'Meret' :12});
     calcolaValori();
   }
 
-  calcolaValori() {
+  calcolaValori() async {
+    _listoneGiocatori = await _giocatoriRepository.getGiocatori();
     budget = _partecipante.MaxBudget;
     for (var nomeGiocatore in _partecipante.giocatori.keys) {
       budget -= _partecipante.giocatori[nomeGiocatore]!;

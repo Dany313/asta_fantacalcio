@@ -1,6 +1,6 @@
 import 'package:asta_fantacalcio/view_models/lega_view_model.dart';
-import 'package:asta_fantacalcio/view_models/giocatori_view_model.dart';
 import 'package:asta_fantacalcio/widget/allenatore_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,42 +14,32 @@ class LegaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LegaViewModel>(
-      create: (_) => LegaViewModel(lega),
-      child: Scaffold(
-        appBar: AppBar(title: Text("Lega")),
-        body: Consumer2<LegaViewModel, GiocatoriViewModel>(
-          builder: (context, legaViewModel, giocatoriViewModel, child) {
-            if (giocatoriViewModel.listoneGiocatori.isEmpty) {
-              return Center(child: CircularProgressIndicator()); // ⚡ Mostra un loader se i dati non sono pronti
-            }
-
-            return ListView.builder(
-              itemCount: legaViewModel.partecipanti.length,
+        create: (_) => LegaViewModel(lega),
+        builder: (context, child) {
+          return Scaffold(
+            appBar: AppBar(title: Text("Lega")),
+            body: ListView.builder(
+              itemCount: context.watch<LegaViewModel>().partecipanti.length,
               itemBuilder: (context, index) {
-                final partecipante = legaViewModel.partecipanti[index];
-
-                return AllenatoreWidget(
-                  partecipante: partecipante,
-                  listoneGiocatori: giocatoriViewModel.listoneGiocatori, // ✅ Ora ha i dati
-                );
+                final partecipante = context.watch<LegaViewModel>().partecipanti[index];
+                return AllenatoreWidget(partecipante: partecipante,);
               },
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _addDialog(context);
-          },
-          child: Icon(Icons.add),
-        ),
-      ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                _addDialog(context);
+              },
+              child: Icon(Icons.add),
+            ),
+          );
+        }
     );
   }
 }
 
 void _addDialog(BuildContext context) {
   final TextEditingController nomeController = TextEditingController();
-  final providerLega = Provider.of<LegaViewModel>(context, listen: false);
+  final providerLega= Provider.of<LegaViewModel>(context, listen: false);
 
   showDialog(
     context: context,
@@ -78,7 +68,7 @@ void _addDialog(BuildContext context) {
                 final newPartecipante = Partecipante(
                   nome: nome,
                   MaxBudget: 500,
-                  giocatori: {}, // Ora possiamo usare i giocatori
+                  giocatori: {},
                 );
 
                 providerLega.addPartecipante(newPartecipante);
