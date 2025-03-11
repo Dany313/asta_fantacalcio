@@ -1,4 +1,5 @@
 import 'package:asta_fantacalcio/view_models/lega_view_model.dart';
+import 'package:asta_fantacalcio/widget/allenatore_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +22,7 @@ class LegaView extends StatelessWidget {
               itemCount: context.watch<LegaViewModel>().partecipanti.length,
               itemBuilder: (context, index) {
                 final partecipante = context.watch<LegaViewModel>().partecipanti[index];
-                return ListTile(
-                  title: Text(partecipante.nome),
-                );
+                return AllenatoreWidget(partecipante: partecipante,);
               },
             ),
             floatingActionButton: FloatingActionButton(
@@ -68,7 +67,7 @@ void _addDialog(BuildContext context) {
               if (nome.isNotEmpty) {
                 final newPartecipante = Partecipante(
                   nome: nome,
-                  budget: 500,
+                  MaxBudget: 500,
                   giocatori: {},
                 );
 

@@ -2,12 +2,12 @@ import 'giocatore.dart';
 
 class Partecipante{
   final String nome;
-  final int budget;
+  final int MaxBudget;
   final Map<String,int> giocatori;
 
   Partecipante({
     required this.nome,
-    required this.budget,
+    required this.MaxBudget,
     required this.giocatori
   });
 
@@ -24,7 +24,7 @@ class Partecipante{
   factory Partecipante.fromJson(Map<String, dynamic> json) {
     return Partecipante(
       nome: json['nome'] as String,
-      budget: json['budget'] as int,
+        MaxBudget: json['MaxBudget'] as int,
         giocatori: (json['giocatori'] as Map<String, dynamic>).map(
           (key, value) => MapEntry(key, value as int),)
     );
@@ -33,7 +33,7 @@ class Partecipante{
   Map<String, dynamic> toJson() {
     return {
       'nome': nome,
-      'budget': budget,
+      'MaxBudget': MaxBudget,
       'giocatori': giocatori
     };
   }

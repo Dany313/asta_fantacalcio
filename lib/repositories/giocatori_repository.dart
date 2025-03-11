@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 
 import '../model/giocatore.dart';
 
-
 class GiocatoriRepository {
 
   Future<List<Giocatore>> getGiocatori() async {
