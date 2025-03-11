@@ -7,10 +7,14 @@ import '../model/giocatore.dart';
 
 class GiocatoriRepository {
 
-  Future<List<Giocatore>> getGiocatori() async {
+  Future<Map<String, Giocatore>> getGiocatori() async {
     final String response = await rootBundle.loadString('assets/listone.json');
     final List<dynamic> data = json.decode(response);
-    return data.map((json) => Giocatore.fromJson(json)).toList();
+    final giocatori = data.map((json) => Giocatore.fromJson(json)).toList();
+
+    // Crea una mappa dove la key è il nome del giocatore
+    return { for (var giocatore in giocatori) giocatore.nome : giocatore };
   }
+
 
 }

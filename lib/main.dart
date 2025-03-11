@@ -1,11 +1,24 @@
-import 'package:asta_fantacalcio/view_models/home_view_model.dart';
+import 'package:asta_fantacalcio/repositories/giocatori_repository.dart';
+import 'package:asta_fantacalcio/view_models/giocatori_view_model.dart';
 import 'package:asta_fantacalcio/views/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+
+  final giocatoriRepository = GiocatoriRepository();
+  final giocatoriViewModel = GiocatoriViewModel();
+  await giocatoriViewModel.fetchGiocatori();
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<GiocatoriRepository>.value(value: giocatoriRepository),
+        ChangeNotifierProvider<GiocatoriViewModel>.value(value: giocatoriViewModel),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

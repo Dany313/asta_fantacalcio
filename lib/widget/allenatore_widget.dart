@@ -6,13 +6,14 @@ import 'package:provider/provider.dart';
 
 class AllenatoreWidget extends StatelessWidget {
   final Partecipante partecipante;
+  final Map<String, Giocatore> listoneGiocatori;
 
-  const AllenatoreWidget({super.key, required this.partecipante});
+  const AllenatoreWidget({super.key, required this.partecipante, required this.listoneGiocatori});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PartecipanteViewModel>(
-      create: (_) => PartecipanteViewModel(partecipante),
+      create: (_) => PartecipanteViewModel(partecipante,listoneGiocatori),
       builder: (context, child) {
         return Container(
           color: Colors.grey[200],
