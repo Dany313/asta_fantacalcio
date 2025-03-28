@@ -1,18 +1,18 @@
-import 'package:asta_fantacalcio/model/giocatore.dart';
-import 'package:asta_fantacalcio/model/partecipante.dart';
+import 'package:asta_fantacalcio/model/player.dart';
+import 'package:asta_fantacalcio/model/club.dart';
 import 'package:asta_fantacalcio/view_models/partecipante_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AllenatoreWidget extends StatelessWidget {
-  final Partecipante partecipante;
+class ClubWidget extends StatelessWidget {
+  final Club club;
 
-  const AllenatoreWidget({super.key, required this.partecipante});
+  const ClubWidget({super.key, required this.club});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<PartecipanteViewModel>(
-      create: (_) => PartecipanteViewModel(partecipante),
+      create: (_) => PartecipanteViewModel(club),
       builder: (context, child) {
         return Container(
           color: Colors.grey[200],
@@ -21,7 +21,7 @@ class AllenatoreWidget extends StatelessWidget {
             children: [
               // Nome Fantallenatore
               Text(
-                context.watch<PartecipanteViewModel>().partecipante.nome,
+                context.watch<PartecipanteViewModel>().partecipante.managerName,
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

@@ -1,35 +1,35 @@
-import 'package:asta_fantacalcio/model/partecipante.dart';
+import 'package:asta_fantacalcio/model/club.dart';
 import 'package:flutter/widgets.dart';
 
-import '../model/giocatore.dart';
-import '../model/lega.dart';
-import '../repositories/giocatori_repository.dart';
-import '../repositories/leghe_repository.dart';
+import '../model/player.dart';
+import '../model/league.dart';
+import '../repositories/players_repository.dart';
+import '../repositories/leagues_repository.dart';
 
 class LegaViewModel extends ChangeNotifier {
 
-  final LegheRepository _legheRepository = LegheRepository();
-  final Lega _lega;
-  late List<Partecipante> _partecipanti;
+  final LeaguesRepository _legheRepository = LeaguesRepository();
+  final League _lega;
+  late List<Club> _partecipanti;
   late String nomeLega;
 
-  List<Partecipante> get partecipanti => _partecipanti;
+  List<Club> get partecipanti => _partecipanti;
 
 
   LegaViewModel(this._lega) {
-    _partecipanti = _lega.partecipanti;
-    nomeLega = _lega.nome;
+    _partecipanti = _lega.clubs;
+    nomeLega = _lega.name;
   }
 
-  Future<void> addPartecipante(Partecipante newPartecipante) async {
+  Future<void> addPartecipante(Club newPartecipante) async {
     _partecipanti.add(newPartecipante);
     notifyListeners();
-    await _legheRepository.updateLega(_lega);
+    await _legheRepository.updateLeague(_lega);
   }
 
-  Future<void> removePartecipante(Partecipante newPartecipante) async {
+  Future<void> removePartecipante(Club newPartecipante) async {
     _partecipanti.remove(newPartecipante);
     notifyListeners();
-    await _legheRepository.updateLega(_lega);
+    await _legheRepository.updateLeague(_lega);
   }
 }

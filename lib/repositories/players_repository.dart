@@ -3,17 +3,17 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
-import '../model/giocatore.dart';
+import '../model/player.dart';
 
-class GiocatoriRepository {
+class PlayersRepository {
 
-  Future<Map<String, Giocatore>> getGiocatori() async {
+  Future<Map<String, Player>> getPlayers() async {
     final String response = await rootBundle.loadString('assets/listone.json');
     final List<dynamic> data = json.decode(response);
-    final giocatori = data.map((json) => Giocatore.fromJson(json)).toList();
+    final players = data.map((json) => Player.fromJson(json)).toList();
 
     // Crea una mappa dove la key è il nome del giocatore
-    return { for (var giocatore in giocatori) giocatore.nome : giocatore };
+    return { for (var player in players) player.name : player };
   }
 
 

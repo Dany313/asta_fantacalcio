@@ -1,14 +1,14 @@
 
-import 'package:asta_fantacalcio/model/giocatore.dart';
-import 'package:asta_fantacalcio/model/partecipante.dart';
+import 'package:asta_fantacalcio/model/player.dart';
+import 'package:asta_fantacalcio/model/club.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../repositories/giocatori_repository.dart';
+import '../repositories/players_repository.dart';
 
 class PartecipanteViewModel extends ChangeNotifier {
-  final GiocatoriRepository _giocatoriRepository = GiocatoriRepository();
-   Map<String, Giocatore> _listoneGiocatori = {};
-  late final Partecipante _partecipante;
+  final PlayersRepository _giocatoriRepository = PlayersRepository();
+   Map<String, Player> _listoneGiocatori = {};
+  late final Club _partecipante;
   late int budget = 0;
   late int puntataMax = 0;
   late int numPor = 0;
@@ -16,21 +16,20 @@ class PartecipanteViewModel extends ChangeNotifier {
   late int numCC = 0;
   late int numAtt = 0;
 
-  Partecipante get partecipante => _partecipante;
+  Club get partecipante => _partecipante;
 
   PartecipanteViewModel(this._partecipante) {
-    _partecipante.giocatori.addAll({'Lookman' :100});
-    _partecipante.giocatori.addAll({'Pinamonti' :100});
-    _partecipante.giocatori.addAll({'Meret' :12});
+    _partecipante.players.addAll({'Lookman' :100});
+    _partecipante.players.addAll({'Pinamonti' :100});
+    _partecipante.players.addAll({'Meret' :12});
     calcolaValori();
   }
 
   calcolaValori() async {
-    _listoneGiocatori = await _giocatoriRepository.getGiocatori();
-    budget = _partecipante.MaxBudget;
-    for (var nomeGiocatore in _partecipante.giocatori.keys) {
-      budget -= _partecipante.giocatori[nomeGiocatore]!;
-      switch(_listoneGiocatori[nomeGiocatore]?.ruolo){
+    _listoneGiocatori = await _giocatoriRepository.getPlayers();
+    for (var nomeGiocatore in _partecipante.players.keys) {
+      budget -= _partecipante.players[nomeGiocatore]!;
+      switch(_listoneGiocatori[nomeGiocatore]?.role){
         case 'P':
           numPor += 1;
           break;
@@ -47,7 +46,7 @@ class PartecipanteViewModel extends ChangeNotifier {
           break;
       }
     }
-    puntataMax =  budget - (25 - _partecipante.giocatori.length);
+    puntataMax =  budget - (25 - _partecipante.players.length);
     notifyListeners();
   }
 

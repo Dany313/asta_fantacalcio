@@ -1,14 +1,14 @@
 import 'package:asta_fantacalcio/view_models/lega_view_model.dart';
-import 'package:asta_fantacalcio/widget/allenatore_widget.dart';
+import 'package:asta_fantacalcio/widget/club_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../model/lega.dart';
-import '../../model/partecipante.dart';
+import '../../model/league.dart';
+import '../../model/club.dart';
 
 class LegaView extends StatelessWidget {
-  final Lega lega;
+  final League lega;
   const LegaView({super.key, required this.lega});
 
   @override
@@ -22,7 +22,7 @@ class LegaView extends StatelessWidget {
               itemCount: context.watch<LegaViewModel>().partecipanti.length,
               itemBuilder: (context, index) {
                 final partecipante = context.watch<LegaViewModel>().partecipanti[index];
-                return AllenatoreWidget(partecipante: partecipante,);
+                return ClubWidget(club: partecipante,);
               },
             ),
             floatingActionButton: FloatingActionButton(
@@ -65,10 +65,9 @@ void _addDialog(BuildContext context) {
               final nome = nomeController.text.trim();
 
               if (nome.isNotEmpty) {
-                final newPartecipante = Partecipante(
-                  nome: nome,
-                  MaxBudget: 500,
-                  giocatori: {},
+                final newPartecipante = Club(
+                  managerName: nome,
+                  players: {},
                 );
 
                 providerLega.addPartecipante(newPartecipante);
