@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../model/lega.dart';
 import '../model/partecipante.dart';
+import '../utils/result.dart';
 
 
 class LegheRepository {
@@ -17,6 +18,15 @@ class LegheRepository {
   Future<File> get _localFile async {
     final path = await _localPath;
     return File('$path/leghe.json');
+  }
+
+  Future<Result<List<Lega>>> load() async {
+
+    final file = await _localFile;
+    final contents = await file.readAsString();
+    final List<dynamic> data = json.decode(contents);
+    return Result.ok(data.map((json) => Lega.fromJson(json)).toList());
+
   }
 
   Future<List<Lega>> getLeghe() async {
