@@ -1,16 +1,23 @@
-import 'dart:math';
-
+import 'package:isar/isar.dart';
 import 'club.dart';
 
+part 'league.g.dart';
+
+@Collection()
 class League {
-  final String name;
-  final int maxBudget;
-  late final List<Club> clubs;
+  // Campo identificatore (Isar gestirà l'auto incremento)
+  Id id = Isar.autoIncrement;
+
+  late String name;
+
+  late int maxBudget;
+
+  // Utilizza IsarLinks per definire la relazione con Club
+  final clubs = IsarLinks<Club>();
 
   League({
     required this.name,
     required this.maxBudget,
-    required this.clubs
   });
 
   @override
@@ -22,23 +29,4 @@ class League {
 
   @override
   int get hashCode => name.hashCode;
-
-  factory League.fromJson(Map<String, dynamic> json) {
-    return League(
-      name: json['name'] as String,
-      maxBudget: json['max_budget'] as int,
-      clubs: (json['clubs'] as List<dynamic>)
-          .map((item) => Club.fromJson(item))
-          .toList(),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'max_budget': maxBudget,
-      'clubs': clubs.map((p) => p.toJson()).toList(),
-    };
-  }
-
 }

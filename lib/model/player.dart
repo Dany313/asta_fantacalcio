@@ -1,36 +1,22 @@
+import 'package:isar/isar.dart';
+part 'player.g.dart';
+
+@Collection()
 class Player {
-  final int id;
+  // Campo identificatore: Isar gestirà l'auto incremento
+  Id id = Isar.autoIncrement;
+
   final String name;
-  final String team;
+
   final String role;
-  final int actualQuote;
+
+  final int acqValue;
 
   Player({
     required this.id,
     required this.name,
-    required this.team,
     required this.role,
-    required this.actualQuote
+    required this.acqValue
   });
-
-  factory Player.fromJson(Map<String, dynamic> json) {
-    return Player(
-      id: json['Id'] as int,
-      name: json['Nome'] as String,
-      team: json['Squadra'] as String,
-      role: json['R'] as String,
-      actualQuote: json['Qt.A'] as int,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'Id': id,
-      'Nome': name,
-      'Squadra': team,
-      'R': role,
-      'Qt.A': actualQuote,
-    };
-  }
 
 }

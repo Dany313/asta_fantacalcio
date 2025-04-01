@@ -1,11 +1,18 @@
 
-import 'package:asta_fantacalcio/views/home/home_view.dart';
+import 'package:asta_fantacalcio/view_models/leagues_view_model.dart';
+import 'package:asta_fantacalcio/views/home/leagues_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp() );
+  runApp(
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => LeaguesViewModel(leaguesRepository: context.read()))
+        ])
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +26,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home:  HomeView(),
+      home:  LeaguesView(viewModel: LeaguesViewModel(leaguesRepository: context.read())),
     );
   }
 }

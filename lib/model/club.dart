@@ -1,12 +1,21 @@
-import 'player.dart';
+import 'package:asta_fantacalcio/model/player.dart';
+import 'package:isar/isar.dart';
+part 'club.g.dart';
 
-class Club{
-  final String managerName;
-  final Map<String,int> players;
+@Collection()
+class Club {
+  // Campo identificatore: Isar gestirà l'auto incremento
+  Id id = Isar.autoIncrement;
+
+  late String managerName;
+
+  late int remainBudget;
+
+  final players = IsarLinks<Player>();
 
   Club({
     required this.managerName,
-    required this.players
+    required this.remainBudget,
   });
 
   @override
@@ -18,19 +27,4 @@ class Club{
 
   @override
   int get hashCode => managerName.hashCode;
-
-  factory Club.fromJson(Map<String, dynamic> json) {
-    return Club(
-      managerName: json['manager_name'] as String,
-        players: (json['players'] as Map<String, dynamic>).map(
-          (key, value) => MapEntry(key, value as int),)
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'manager_name': managerName,
-      'players': players
-    };
-  }
 }
