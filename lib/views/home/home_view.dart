@@ -1,10 +1,12 @@
 
 import 'package:asta_fantacalcio/views/lega/lega_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 
 import '../../model/lega.dart';
+import '../../routing/routes.dart';
 import '../../view_models/home_view_model.dart';
 
 class HomeView extends StatelessWidget {
@@ -23,12 +25,11 @@ class HomeView extends StatelessWidget {
             final lega = context.watch<HomeViewModel>().leghe[index];
             return ListTile(
               title: Text(lega.nome),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LegaView(lega: lega,)),
-                );
-              },
+              onTap: () => context.push(
+                Routes.legaWithName(
+                  lega.nome,
+                ),
+              ),
             );
           },
         ),

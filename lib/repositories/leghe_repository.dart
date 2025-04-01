@@ -30,6 +30,15 @@ class LegheRepository {
     }
   }
 
+  Future<Lega> getLega(String nomeLega) async {
+    try {
+      List<Lega> legheList =  await getLeghe();
+      return legheList.firstWhere((e) => e.nome == nomeLega);
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
   Future<void> addLega(Lega lega) async {
     final file = await _localFile;
     final String response = await file.readAsString();
