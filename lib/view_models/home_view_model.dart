@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../repositories/leghe_repository.dart';
 import '../model/lega.dart';
+import '../utils/command.dart';
+import '../utils/result.dart';
 
 
 class HomeViewModel extends ChangeNotifier {
@@ -13,13 +15,25 @@ class HomeViewModel extends ChangeNotifier {
 
   List<Lega> get leghe => _leghe;
 
+  late Command0 load;
+
   HomeViewModel() {
-    fetchLeghe();
+    load = Command0(_fetchLeghe)..execute();
   }
 
-  Future<void> fetchLeghe() async {
-    _leghe = await _legheRepository.getLeghe();
-    notifyListeners();
+  Future<Result> _fetchLeghe() async {
+    try {
+      final result = await _legheRepository.load();
+      switch (result) {
+        case Ok<List<Lega>>():
+          _leghe = result.value;
+        case Error<List<Lega>>():
+          return result;
+      }
+      return result;
+    } finally {
+      notifyListeners();
+    }
   }
 
   Future<void> aggiungiLega(Lega lega) async {
