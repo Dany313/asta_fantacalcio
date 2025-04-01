@@ -9,17 +9,25 @@ import '../repositories/leghe_repository.dart';
 class LegaViewModel extends ChangeNotifier {
 
   final LegheRepository _legheRepository = LegheRepository();
-  final Lega _lega;
+  late final Lega _lega;
   late List<Partecipante> _partecipanti;
   late String nomeLega;
 
   List<Partecipante> get partecipanti => _partecipanti;
 
 
-  LegaViewModel(this._lega) {
+  LegaViewModel(String legaName) {
+    loadLega(legaName);
+    _partecipanti = [];
+  }
+
+  Future<void> loadLega(String legaName) async {
+    _lega = await _legheRepository.getLega(legaName);
     _partecipanti = _lega.partecipanti;
     nomeLega = _lega.nome;
+    notifyListeners();
   }
+
 
   Future<void> addPartecipante(Partecipante newPartecipante) async {
     _partecipanti.add(newPartecipante);

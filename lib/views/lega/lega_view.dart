@@ -8,16 +8,16 @@ import '../../model/lega.dart';
 import '../../model/partecipante.dart';
 
 class LegaView extends StatelessWidget {
-  final Lega lega;
-  const LegaView({super.key, required this.lega});
+  final String legaName;
+  const LegaView({super.key, required this.legaName});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<LegaViewModel>(
-        create: (_) => LegaViewModel(lega),
+        create: (_) => LegaViewModel(legaName),
         builder: (context, child) {
           return Scaffold(
-            appBar: AppBar(title: Text("Lega")),
+            appBar: AppBar(title: Text(legaName)),
             body: ListView.builder(
               itemCount: context.watch<LegaViewModel>().partecipanti.length,
               itemBuilder: (context, index) {
