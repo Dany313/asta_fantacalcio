@@ -14,6 +14,7 @@ class LegaViewModel extends ChangeNotifier {
   late String nomeLega;
 
   List<Partecipante> get partecipanti => _partecipanti;
+  Lega get lega => _lega;
 
 
   LegaViewModel(String legaName) {

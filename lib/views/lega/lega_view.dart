@@ -2,10 +2,12 @@ import 'package:asta_fantacalcio/view_models/lega_view_model.dart';
 import 'package:asta_fantacalcio/widget/allenatore_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/lega.dart';
 import '../../model/partecipante.dart';
+import '../../routing/routes.dart';
 
 class LegaView extends StatelessWidget {
   final String legaName;
@@ -17,7 +19,12 @@ class LegaView extends StatelessWidget {
         create: (_) => LegaViewModel(legaName),
         builder: (context, child) {
           return Scaffold(
-            appBar: AppBar(title: Text(legaName)),
+            appBar: AppBar(title: Text(legaName),
+            actions: [
+              TextButton(onPressed: () => {
+                context.goNamed("asta", extra: context.read<LegaViewModel>().lega)
+              }, child: Text("ASTA"))
+            ],),
             body: ListView.builder(
               itemCount: context.watch<LegaViewModel>().partecipanti.length,
               itemBuilder: (context, index) {
@@ -39,7 +46,7 @@ class LegaView extends StatelessWidget {
 
 void _addDialog(BuildContext context) {
   final TextEditingController nomeController = TextEditingController();
-  final providerLega= Provider.of<LegaViewModel>(context, listen: false);
+  final providerLega = Provider.of<LegaViewModel>(context, listen: false);
 
   showDialog(
     context: context,
