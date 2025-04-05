@@ -46,10 +46,12 @@ class _HomeViewState extends State<HomeView> {
             builder: (context) => StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
-                  title: const Text('Aggiungi Lega'),
+                  title:  Text('AGGIUNGI LEGA',
+                    style: Theme.of(context).textTheme.titleMedium,),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 10,
                     children: [
                       TextField(
                         controller: nomeController,
@@ -67,8 +69,8 @@ class _HomeViewState extends State<HomeView> {
                           }
                         },
                       ),
-                      const SizedBox(height: 16),
-                      const Text('Budget Massimo:'),
+                       Text('BUDGET MASSIMO:',
+                          style: Theme.of(context).textTheme.titleMedium,),
                       RadioListTile<int>(
                         title: const Text('300'),
                         value: 300,
@@ -116,7 +118,7 @@ class _HomeViewState extends State<HomeView> {
                           return; // Ferma l'esecuzione se il nome è vuoto
                         }
 
-                        final nome = nomeController.text.trim();
+                        final nome = nomeController.text.trim().toUpperCase();
 
                         // Chiamare la funzione per aggiungere la lega
                         widget.viewModel.addLega.execute(nome, selectedBudget);

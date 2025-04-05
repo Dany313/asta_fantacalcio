@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 final myTheme = ThemeData(
+
+  dialogTheme: DialogTheme(
+    titleTextStyle: TextStyle(
+      color: Colors.white,
+    ),
+    backgroundColor: Colors.deepPurple[900] ?? Colors.deepPurple,
+  ),
+
 // Colori primari e di accento
   colorScheme: ColorScheme.fromSeed(
     seedColor: Colors.greenAccent[400] ?? Colors.greenAccent,
@@ -59,8 +67,11 @@ final myTheme = ThemeData(
 
 // Input
   inputDecorationTheme: InputDecorationTheme(
+    labelStyle: TextStyle(
+      color: Colors.white,
+    ),
     filled: true,
-    fillColor: Colors.white,
+    fillColor: Colors.deepPurple[200] ?? Colors.deepPurple,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(16),
       borderSide: BorderSide.none,
@@ -79,8 +90,8 @@ final myTheme = ThemeData(
 
 // Testo
   textTheme: const TextTheme(
-    titleLarge: TextStyle(fontWeight: FontWeight.bold),
-    titleMedium: TextStyle(fontWeight: FontWeight.bold),
+    titleLarge: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 30),
+    titleMedium: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
   ),
 
 // Scaffolds
