@@ -19,9 +19,6 @@ class PartecipanteViewModel extends ChangeNotifier {
   Partecipante get partecipante => _partecipante;
 
   PartecipanteViewModel(this._partecipante) {
-    _partecipante.giocatori.addAll({'Lookman' :100});
-    _partecipante.giocatori.addAll({'Pinamonti' :100});
-    _partecipante.giocatori.addAll({'Meret' :12});
     calcolaValori();
   }
 
