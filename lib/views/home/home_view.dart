@@ -20,7 +20,6 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       appBar: AppBar(
         title: Text("FANTA ASTA"),
-        backgroundColor: Colors.green,
         actions: [
           IconButton(
             onPressed: () {
@@ -32,7 +31,6 @@ class _HomeViewState extends State<HomeView> {
       ),
       floatingActionButton: FloatingActionButton(
         key: const Key(addLegaButtonKey),
-        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
         onPressed: () async {
           // Creare controller per il campo nome
@@ -149,7 +147,6 @@ class _HomeViewState extends State<HomeView> {
               final lega = widget.viewModel.leghe[index];
               return Card(
                 child: ListTile(
-                  tileColor: Colors.green[100],
                   title: Text(lega.nome),
                   subtitle: Text("Partecipanti: ${lega.partecipanti.length}  Budget: ${lega.maxBudget}"),
                   onTap: () => {},

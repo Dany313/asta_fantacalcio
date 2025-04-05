@@ -1,6 +1,7 @@
 
 import 'package:asta_fantacalcio/config/dependencies.dart';
 import 'package:asta_fantacalcio/routing/router.dart';
+import 'package:asta_fantacalcio/theme/theme.dart';
 import 'package:asta_fantacalcio/views/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: router,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: myTheme
     );
   }
 }
