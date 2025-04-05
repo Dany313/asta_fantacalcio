@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:asta_fantacalcio/repositories/giocatori/giocatori_repository.dart';
 import 'package:flutter/services.dart';
 
-import '../model/giocatore.dart';
+import '../../model/giocatore.dart';
 
-class GiocatoriRepository {
+class GiocatoriJsonRepository implements GiocatoriRepository{
 
   Future<Map<String, Giocatore>> getGiocatori() async {
     final String response = await rootBundle.loadString('assets/listone.json');

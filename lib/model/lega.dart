@@ -2,10 +2,12 @@ import 'partecipante.dart';
 
 class Lega {
   final String nome;
+  final int maxBudget;
   late final List<Partecipante> partecipanti;
 
   Lega({
     required this.nome,
+    required this.maxBudget,
     required this.partecipanti
   });
 
@@ -22,6 +24,7 @@ class Lega {
   factory Lega.fromJson(Map<String, dynamic> json) {
     return Lega(
       nome: json['nome'] as String,
+      maxBudget: json['max_budget'] as int,
       partecipanti: (json['partecipanti'] as List<dynamic>)
           .map((item) => Partecipante.fromJson(item))
           .toList(),
@@ -31,6 +34,7 @@ class Lega {
   Map<String, dynamic> toJson() {
     return {
       'nome': nome,
+      'max_budget': maxBudget,
       'partecipanti': partecipanti.map((p) => p.toJson()).toList(),
     };
   }

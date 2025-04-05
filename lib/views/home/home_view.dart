@@ -1,93 +1,170 @@
-
-import 'package:asta_fantacalcio/views/lega/lega_view.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 
 import '../../model/lega.dart';
-import '../../routing/routes.dart';
 import '../../view_models/home_view_model.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+const String addLegaButtonKey = 'add-lega-button';
+
+class HomeView extends StatefulWidget {
+  const HomeView({super.key, required this.viewModel});
+
+  final HomeViewModel viewModel;
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<HomeViewModel>(
-      create: (_) => HomeViewModel(),
-    builder: (context, child) {
-      return Scaffold(
-        appBar: AppBar(title: Text("Fanta Asta")),
-        body: ListView.builder(
-          itemCount: context.watch<HomeViewModel>().leghe.length,
-          itemBuilder: (context, index) {
-            final lega = context.watch<HomeViewModel>().leghe[index];
-            return ListTile(
-              title: Text(lega.nome),
-              onTap: () => context.push(
-                Routes.legaWithName(
-                  lega.nome,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("FANTA ASTA"),
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: () {
+              widget.viewModel.clear.execute();
+            },
+            icon: Icon(Icons.delete),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        key: const Key(addLegaButtonKey),
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          // Creare controller per il campo nome
+          final nomeController = TextEditingController();
+          // Valore iniziale per il budget
+          int selectedBudget = 500;
+          // Variabile per tracciare l'errore di validazione
+          String? nomeError;
+
+          // Mostrare il dialog
+          await showDialog(
+            context: context,
+            builder: (context) => StatefulBuilder(
+              builder: (context, setState) {
+                return AlertDialog(
+                  title: const Text('Aggiungi Lega'),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: nomeController,
+                        decoration: InputDecoration(
+                          labelText: 'Nome Lega',
+                          hintText: 'Inserisci il nome della lega',
+                          errorText: nomeError,
+                        ),
+                        onChanged: (value) {
+                          // Reset dell'errore quando l'utente digita
+                          if (nomeError != null) {
+                            setState(() {
+                              nomeError = null;
+                            });
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      const Text('Budget Massimo:'),
+                      RadioListTile<int>(
+                        title: const Text('300'),
+                        value: 300,
+                        groupValue: selectedBudget,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedBudget = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile<int>(
+                        title: const Text('500'),
+                        value: 500,
+                        groupValue: selectedBudget,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedBudget = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile<int>(
+                        title: const Text('1000'),
+                        value: 1000,
+                        groupValue: selectedBudget,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedBudget = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Annulla'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        // Validare che il nome non sia vuoto
+                        if (nomeController.text.trim().isEmpty) {
+                          setState(() {
+                            nomeError = 'Il nome della lega è obbligatorio';
+                          });
+                          return; // Ferma l'esecuzione se il nome è vuoto
+                        }
+
+                        final nome = nomeController.text.trim();
+
+                        // Chiamare la funzione per aggiungere la lega
+                        widget.viewModel.addLega.execute(nome, selectedBudget);
+
+                        // Chiudere il dialog
+                        Navigator.pop(context);
+
+                        // Mostrare un feedback
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Lega "$nome" aggiunta con successo')),
+                        );
+                      },
+                      child: const Text('Aggiungi'),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        },
+      ),
+      body: ListenableBuilder(
+        listenable: widget.viewModel,
+        builder: (context, _) {
+          return ListView.builder(
+            itemCount: widget.viewModel.leghe.length,
+            itemBuilder: (context, index) {
+              final lega = widget.viewModel.leghe[index];
+              return Card(
+                child: ListTile(
+                  tileColor: Colors.green[100],
+                  title: Text(lega.nome),
+                  subtitle: Text("Partecipanti: ${lega.partecipanti.length}  Budget: ${lega.maxBudget}"),
+                  onTap: () => {},
+                  trailing: IconButton(
+                    onPressed: () {
+                      widget.viewModel.removeLega.execute(lega);
+                    },
+                    icon: Icon(Icons.close),
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _addDialog(context);
-          },
-          child: Icon(Icons.add),
-        ),
-      );
-    }
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
-
-  void _addDialog(BuildContext context) {
-    final TextEditingController nomeController = TextEditingController();
-    final providerHome= Provider.of<HomeViewModel>(context, listen: false);
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Aggiungi Lega"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nomeController,
-                decoration: InputDecoration(labelText: "Nome"),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Annulla"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final nome = nomeController.text.trim();
-
-                if (nome.isNotEmpty) {
-                  final nuovaLega = Lega(
-                    nome: nome,
-                    partecipanti: [],
-                  );
-
-                  providerHome.aggiungiLega(nuovaLega);
-                }
-
-                Navigator.pop(context); // Chiudi la dialog
-              },
-              child: Text("Aggiungi"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
