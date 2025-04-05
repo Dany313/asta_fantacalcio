@@ -1,10 +1,12 @@
+import 'package:asta_fantacalcio/repositories/leghe_repository.dart';
 import 'package:flutter/foundation.dart';
 import '../model/giocatore.dart';
 import '../model/partecipante.dart';
-import '../repositories/giocatori_repository.dart';
+import '../repositories/giocatori_repository.dart'; 
 
 class AstaViewModel extends ChangeNotifier {
   final GiocatoriRepository _giocatoriRepository = GiocatoriRepository();
+  final LegheRepository _legheRepository = LegheRepository();
   Map<String, Giocatore> _tuttiGiocatori = {};
   List<Giocatore> _giocatoriFiltrati = [];
   Giocatore? _giocatoreSelezionato;
@@ -62,6 +64,25 @@ class AstaViewModel extends ChangeNotifier {
     _partecipanteSelezionato = partecipante;
     notifyListeners();
   }
+
+  void assegnaGiocatore(String nomeLega){
+    _legheRepository.addGiocatoreToPartecipante(
+        _giocatoreSelezionato!.nome,
+        _valoreCorrente,
+        nomeLega,
+        _partecipanteSelezionato!.nome);
+    notifyListeners();
+  }
+
+  void removeGiocatore(String nomeLega){
+    _legheRepository.removeGiocatoreFromPartecipante(
+        _giocatoreSelezionato!.nome,
+        nomeLega,
+        _partecipanteSelezionato!.nome);
+    notifyListeners();
+  }
+
+
 
   void incrementaValore() {
     _valoreCorrente++;

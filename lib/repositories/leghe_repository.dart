@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
+import '../model/giocatore.dart';
 import '../model/lega.dart';
 import '../model/partecipante.dart';
 import '../utils/result.dart';
@@ -58,6 +59,17 @@ class LegheRepository {
     await file.writeAsString(json.encode(data));
   }
 
+  Future<void> removeLega(String nomeLega) async {
+    try {
+      List<Lega> legheList = await getLeghe();
+      legheList.removeWhere((lega) => lega.nome == nomeLega);
+      await saveLeghe(legheList);
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+
   Future<void> saveLeghe(List<Lega> leghe) async {
     final file = await _localFile;
     await file.writeAsString(json.encode(leghe.map((e) => e.toJson()).toList()));
@@ -92,5 +104,39 @@ class LegheRepository {
     legheList.remove(lega);
     legheList.add(lega);
     await saveLeghe(legheList);
+  }
+
+  Future<void> addGiocatoreToPartecipante(String nomeGiocatore, int valoreAcq, String nomeLega, String nomePartecipante) async {
+    try {
+      List<Lega> legheList = await getLeghe();
+      Lega lega = legheList.firstWhere((l) => l.nome == nomeLega);
+      Partecipante partecipante = lega.partecipanti.firstWhere((p) => p.nome == nomePartecipante);
+
+      // Aggiungi il giocatore alla mappa dei giocatori del partecipante
+      partecipante.giocatori[nomeGiocatore] = valoreAcq;
+
+      print(partecipante.giocatori);
+
+      // Salva le modifiche
+      await saveLeghe(legheList);
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  Future<void> removeGiocatoreFromPartecipante(String nomeGiocatore, String nomeLega, String nomePartecipante) async {
+    try {
+      List<Lega> legheList = await getLeghe();
+      Lega lega = legheList.firstWhere((l) => l.nome == nomeLega);
+      Partecipante partecipante = lega.partecipanti.firstWhere((p) => p.nome == nomePartecipante);
+
+      // Aggiungi il giocatore alla mappa dei giocatori del partecipante
+      partecipante.giocatori.remove(nomeGiocatore);
+
+      // Salva le modifiche
+      await saveLeghe(legheList);
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 }

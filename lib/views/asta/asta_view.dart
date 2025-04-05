@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/lega.dart';
 import '../../model/giocatore.dart';
 import '../../model/partecipante.dart';
+import '../../routing/routes.dart';
 import '../../view_models/asta_view_model.dart';
 import '../../widget/allenatore_widget.dart';
 
@@ -19,7 +21,22 @@ class AstaView extends StatelessWidget {
           final viewModel = context.watch<AstaViewModel>();
 
           return Scaffold(
-            appBar: AppBar(title: Text(lega.nome)),
+            appBar: AppBar(
+              actions: [
+                TextButton(onPressed: () => {
+
+                }, child: Text("SQUADRE"))
+              ],
+                leading: TextButton(
+                    onPressed: () => {
+                      context.push(
+                        Routes.legaWithName(
+                          lega.nome,
+                        ),
+                      ),
+                    },
+                    child: Text("BACK")),
+            ),
             body: Column(
               children: [
                 // Campo di ricerca
@@ -83,8 +100,7 @@ class AstaView extends StatelessWidget {
                             SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: () {
-                                // Logica per assegnare il giocatore al partecipante
-                                // Da implementare nel ViewModel
+                                context.read<AstaViewModel>().assegnaGiocatore(lega.nome);
                               },
                               child: Text('Assegna Giocatore'),
                             ),
