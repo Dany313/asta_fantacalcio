@@ -7,8 +7,17 @@ abstract class LegheRepository {
 
   Future<Result<void>> clearLegheList();
 
+  Future<Result<Lega>> getLega(String nome);
+
   Future<Result<void>> addLega(String nomeLega, int maxBudget);
 
-  Future<Result<void>> removeLega(Lega lega);
+  Future<Result<void>> removeLega(String nomeLega);
+
+  Future<Result<void>> addPartecipanteToLega(String nomeLega, String nomePartecipante);
+
+  Future<Result<void>> removePartecipanteFromLega(String nomeLega, String nomePartecipante);
+
+  Future<Result<void>> clearPartecipantiFromLega(String nomeLega);
+
 
 }

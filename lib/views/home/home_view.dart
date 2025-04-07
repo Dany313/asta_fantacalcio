@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../routing/routes.dart';
 import '../../view_models/home_view_model.dart';
 import 'add_lega_dialog.dart';
 
@@ -56,7 +58,9 @@ class _HomeViewState extends State<HomeView> {
                 child: ListTile(
                   title: Text(lega.nome),
                   subtitle: Text("Partecipanti: ${lega.partecipanti.length}  Budget: ${lega.maxBudget}"),
-                  onTap: () => {},
+                  onTap: () => {
+                   context.push(Routes.legaWithName(lega.nome)),
+                  },
                   trailing: IconButton(
                     onPressed: () {
                       widget.viewModel.removeLega.execute(lega);

@@ -75,9 +75,9 @@ class LegheJsonRepository implements LegheRepository{
   }
 
   @override
-  Future<Result<void>> removeLega(Lega lega) async {
+  Future<Result<void>> removeLega(String nomeLega) async {
     try {
-      _leghe.remove(lega);
+      _leghe.removeWhere((lega) => lega.nome == nomeLega);
 
       final file = await _localFile;
       await file.writeAsString(json.encode(_leghe.map((e) => e.toJson()).toList()));
@@ -87,6 +87,65 @@ class LegheJsonRepository implements LegheRepository{
       return Result.error(e);
     }
   }
+
+  @override
+  Future<Result<void>> addPartecipanteToLega(String nomeLega, String nomePartecipante) async {
+    try {
+      _leghe.firstWhere((legaTemp) => legaTemp.nome == nomeLega)
+          .partecipanti
+          .add(Partecipante(nome: nomePartecipante, giocatori: {}));
+
+      final file = await _localFile;
+      await file.writeAsString(json.encode(_leghe.map((e) => e.toJson()).toList()));
+
+      return const Result.ok(null);
+    }  on Exception catch (e){
+      return Result.error(e);
+    }
+  }
+
+  @override
+  Future<Result<Lega>> getLega(String nome) async {
+    try {
+      final file = await _localFile;
+      final contents = await file.readAsString();
+      final List<dynamic> data = json.decode(contents);
+      _leghe = data.map((json) => Lega.fromJson(json)).toList();
+      return Result.ok(_leghe.firstWhere((lega) => lega.nome == nome));
+       } on Exception catch (e) {
+       return Result.error(e);
+      }
+  }
+
+  @override
+  Future<Result<void>> removePartecipanteFromLega(String nomeLega, String nomePartecipante) async {
+    try {
+      _leghe.firstWhere((legaTemp) => legaTemp.nome == nomeLega)
+          .partecipanti.removeWhere((partecipanteTemp) => partecipanteTemp.nome == nomePartecipante);
+
+      final file = await _localFile;
+      await file.writeAsString(json.encode(_leghe.map((e) => e.toJson()).toList()));
+
+      return const Result.ok(null);
+    }  on Exception catch (e){
+      return Result.error(e);
+    }
+  }
+
+  @override
+  Future<Result<void>> clearPartecipantiFromLega(String nomeLega) async {
+    try {
+      _leghe.firstWhere((legaTemp) => legaTemp.nome == nomeLega).partecipanti.clear();
+
+      final file = await _localFile;
+      await file.writeAsString(json.encode(_leghe.map((e) => e.toJson()).toList()));
+
+      return const Result.ok(null);
+    }  on Exception catch (e){
+      return Result.error(e);
+    }
+  }
+
 
   // Future<Result<List<Lega>>> loadLeghe() async {
   //

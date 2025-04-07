@@ -1,9 +1,5 @@
+import 'package:flutter/material.dart';
 
-import 'package:asta_fantacalcio/repositories/giocatori/giocatori_json_repository.dart';
-import 'package:flutter/cupertino.dart';
-
-
-import '../repositories/leghe/leghe_json_repository.dart';
 import '../model/lega.dart';
 import '../repositories/leghe/leghe_repository.dart';
 import '../utils/command.dart';
@@ -40,7 +36,7 @@ class HomeViewModel extends ChangeNotifier {
           _leghe = result.value;
           print("Leghe caricate: ${_leghe.length}");
         case Error<List<Lega>>():
-          print("Errore nel caricamento delle leghe: ${result}");
+          print("Errore nel caricamento delle leghe: $result");
           return result;
       }
       return result;
@@ -58,7 +54,7 @@ class HomeViewModel extends ChangeNotifier {
           _leghe = [];
           print("Leghe caricate: ${_leghe.length}");
         case Error<void>():
-          print("Errore nel caricamento delle leghe: ${result}");
+          print("Errore nel caricamento delle leghe: $result");
           return result;
       }
       return result;
@@ -69,28 +65,19 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<Result<void>> _removeLega(Lega lega) async {
     try {
-      final resultRemove = await _legheRepository.removeLega(lega);
+      final resultRemove = await _legheRepository.removeLega(lega.nome);
       switch (resultRemove) {
         case Ok<void>():
           print("Lega rimossa con successo");
           break;
         case Error<void>():
-          print("Errore nell'aggiunta della lega: ${resultRemove}");
+          print("Errore nell'aggiunta della lega: $resultRemove");
           return resultRemove;
       }
 
       print("Ricaricamento leghe dopo remove...");
-      final resultLoadLeghe = await _legheRepository.getLegheList();
-      switch (resultLoadLeghe) {
-        case Ok<List<Lega>>():
-          _leghe = resultLoadLeghe.value;
-          print("Leghe ricaricate: ${_leghe.length}");
-        case Error<List<Lega>>():
-          print("Errore nel ricaricamento delle leghe: ${resultLoadLeghe}");
-          return resultLoadLeghe;
-      }
 
-      return resultLoadLeghe;
+      return _load();
     } finally {
       print("Notifica ascoltatori");
       notifyListeners();
@@ -106,52 +93,16 @@ class HomeViewModel extends ChangeNotifier {
           print("Lega aggiunta con successo");
           break;
         case Error<void>():
-          print("Errore nell'aggiunta della lega: ${resultAdd}");
+          print("Errore nell'aggiunta della lega: $resultAdd");
           return resultAdd;
       }
 
       print("Ricaricamento leghe dopo aggiunta...");
-      final resultLoadLeghe = await _legheRepository.getLegheList();
-      switch (resultLoadLeghe) {
-        case Ok<List<Lega>>():
-          _leghe = resultLoadLeghe.value;
-          print("Leghe ricaricate: ${_leghe.length}");
-        case Error<List<Lega>>():
-          print("Errore nel ricaricamento delle leghe: ${resultLoadLeghe}");
-          return resultLoadLeghe;
-      }
-
-      return resultLoadLeghe;
+      return _load();
     } finally {
       print("Notifica ascoltatori");
       notifyListeners();
     }
   }
 
-  // Future<Result> _fetchLeghe() async {
-  //   try {
-  //     final result = await _legheRepository.load();
-  //     switch (result) {
-  //       case Ok<List<Lega>>():
-  //         _leghe = result.value;
-  //       case Error<List<Lega>>():
-  //         return result;
-  //     }
-  //     return result;
-  //   } finally {
-  //     notifyListeners();
-  //   }
-  // }
-  //
-  // Future<void> aggiungiLega(Lega lega) async {
-  //   _leghe.add(lega);
-  //   notifyListeners();
-  //   await _legheRepository.saveLeghe(_leghe);
-  // }
-  //
-  // Future<void> rimuoviLega(Lega lega) async {
-  //   _leghe.remove(lega);
-  //   notifyListeners();
-  //   await _legheRepository.saveLeghe(_leghe);
-  // }
 }
