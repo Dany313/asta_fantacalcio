@@ -41,7 +41,7 @@ class _LegaViewState extends State<LegaView> {
               widget.viewModel.addPartecipante.execute(nome);
 
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Lega "$nome" aggiunta con successo')),
+                SnackBar(content: Text('Partecipante "$nome" aggiunto con successo')),
               );
             },
           );
@@ -52,11 +52,12 @@ class _LegaViewState extends State<LegaView> {
         builder: (context, _) {
           return ListView.builder(
             itemCount: widget.viewModel.partecipanti.length,
-            itemBuilder: (context, index) {
+            itemBuilder: (context, index)  {
               final partecipante = widget.viewModel.partecipanti[index];
               return Card(
                 child: ListTile(
                   title: Text(partecipante.nome),
+                  subtitle: Text(widget.viewModel.giocatoriPartecipanti[partecipante.nome]!),
                   onTap: () => {},
                   trailing: IconButton(
                     onPressed: () {

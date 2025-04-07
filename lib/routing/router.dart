@@ -28,6 +28,7 @@ final router = GoRouter(
         final name = state.pathParameters['name']!;
         final viewModel = LegaViewModel(
           legheRepository: context.read(),
+          giocatoriRepository: context.read(),
           nomeLega: name,
         );
         return LegaView(viewModel: viewModel);
