@@ -1,0 +1,1 @@
+final List<int> maxBudgetOptions = [300, 500, 1000];
