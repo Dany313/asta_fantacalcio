@@ -1,4 +1,5 @@
 import 'package:asta_fantacalcio/routing/routes.dart';
+import 'package:asta_fantacalcio/view_models/asta_view_model.dart';
 import 'package:asta_fantacalcio/view_models/lega_view_model.dart';
 import 'package:asta_fantacalcio/views/asta/asta_view.dart';
 import 'package:asta_fantacalcio/views/home/home_view.dart';
@@ -28,19 +29,22 @@ final router = GoRouter(
         final name = state.pathParameters['name']!;
         final viewModel = LegaViewModel(
           legheRepository: context.read(),
-          giocatoriRepository: context.read(),
           nomeLega: name,
         );
         return LegaView(viewModel: viewModel);
       },
     ),
-    // GoRoute(
-    //   path: '/asta',
-    //   name: 'asta',
-    //   builder: (context, state) {
-    //     Lega sample = state.extra as Lega;
-    //     return AstaView(lega: sample);
-    //   },
-    // ),
+    GoRoute(
+      path: '/asta/:name',
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        final viewModel = AstaViewModel(
+          legheRepository: context.read(),
+          giocatoriRepository: context.read(),
+          nomeLega: name,
+        );
+        return AstaView(viewModel: viewModel);
+      },
+    ),
   ],
 );

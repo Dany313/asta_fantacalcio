@@ -1,6 +1,9 @@
+import 'package:asta_fantacalcio/widget/allenatore_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../model/lega.dart';
+import '../../routing/routes.dart';
 import '../../view_models/lega_view_model.dart';
 import 'add_partecipante_dialog.dart';
 
@@ -25,9 +28,11 @@ class _LegaViewState extends State<LegaView> {
         actions: [
           IconButton(
             onPressed: () {
-              widget.viewModel.clear.execute();
+              context.push(Routes.astaWithName(widget.viewModel.nomeLega));
+              // widget.viewModel.clear.execute();
+
             },
-            icon: Icon(Icons.delete),
+            icon: Icon(Icons.add_chart),
           ),
         ],
       ),
@@ -55,17 +60,9 @@ class _LegaViewState extends State<LegaView> {
             itemBuilder: (context, index)  {
               final partecipante = widget.viewModel.partecipanti[index];
               return Card(
-                child: ListTile(
-                  title: Text(partecipante.nome),
-                  subtitle: Text(widget.viewModel.giocatoriPartecipanti[partecipante.nome]!),
-                  onTap: () => {},
-                  trailing: IconButton(
-                    onPressed: () {
-                      widget.viewModel.removePartecipante.execute(partecipante.nome);
-                    },
-                    icon: Icon(Icons.close),
-                  ),
-                ),
+                child: AllenatoreWidget(
+                    partecipante: partecipante,
+                    deletePartecipante: widget.viewModel.removePartecipante)
               );
             },
           );
@@ -74,3 +71,4 @@ class _LegaViewState extends State<LegaView> {
     );
   }
 }
+

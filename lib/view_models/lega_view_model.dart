@@ -1,6 +1,4 @@
 
-import 'package:asta_fantacalcio/model/giocatore.dart';
-import 'package:asta_fantacalcio/repositories/giocatori/giocatori_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../model/partecipante.dart';
@@ -13,10 +11,8 @@ class LegaViewModel extends ChangeNotifier {
 
   LegaViewModel({
     required LegheRepository legheRepository,
-    required GiocatoriRepository giocatoriRepository,
     required String nomeLega  // Parametro String aggiunto
   }) : _legheRepository = legheRepository,
-        _giocatoriRepository = giocatoriRepository,
         _nomeLega = nomeLega {
     load = Command0(_load)..execute();// Salviamo il parametro
     clear = Command0(_clear);
@@ -25,48 +21,19 @@ class LegaViewModel extends ChangeNotifier {
   }
 
   final LegheRepository _legheRepository;
-  final GiocatoriRepository _giocatoriRepository;
   final String _nomeLega;
 
   List<Partecipante> _partecipanti = [];
   int _budgetLega = 500;
-  Map<String,String> _giocatoriPartecipanti = {};
 
   List<Partecipante> get partecipanti => _partecipanti;
   int get budgetLega => _budgetLega;
   String get nomeLega => _nomeLega;
-  Map<String,String> get giocatoriPartecipanti => _giocatoriPartecipanti;
 
   late Command0 load;
   late Command0 clear;
   late Command1<void, String> removePartecipante;
   late Command1<void, String> addPartecipante;
-
-  void calcolaGiocatori(String nomePartecipante) {
-    int numP = 0;
-    int numD = 0;
-    int numC = 0;
-    int numA = 0;
-
-    _partecipanti.firstWhere((partecipante) => partecipante.nome == nomePartecipante)
-    .giocatori.forEach((nomeGiocatore, valoreAcquisto) async {
-
-      final result = await _giocatoriRepository.getGiocatore(nomeGiocatore);
-      switch (result) {
-        case Ok<Giocatore>():
-          switch (result.value.ruolo) {
-            case "P" : numP++; break;
-            case "D" : numD++; break;
-            case "C" : numC++; break;
-            case "A" : numA++; break;
-          }
-        case Error<Giocatore>():
-          print("Errore nel caricamento della lega: ${result}");
-      }
-    });
-    _giocatoriPartecipanti[nomePartecipante] = "P:$numP D:$numD C:$numC A:$numA";
-
-  }
 
   Future<Result> _load() async {
     try {
@@ -76,9 +43,6 @@ class LegaViewModel extends ChangeNotifier {
         case Ok<Lega>():
           _budgetLega = result.value.maxBudget;
           _partecipanti = result.value.partecipanti;
-          for (var partecipante in _partecipanti) {
-            calcolaGiocatori(partecipante.nome);
-          }
           print("Lega caricata: $_nomeLega");
         case Error<Lega>():
           print("Errore nel caricamento della lega: ${result}");

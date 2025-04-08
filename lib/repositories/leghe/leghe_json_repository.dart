@@ -93,7 +93,7 @@ class LegheJsonRepository implements LegheRepository{
     try {
       _leghe.firstWhere((legaTemp) => legaTemp.nome == nomeLega)
           .partecipanti
-          .add(Partecipante(nome: nomePartecipante, giocatori: {}));
+          .add(Partecipante(nome: nomePartecipante, giocatori: {}, numP: 0, numD: 0, numC: 0, numA: 0));
 
       final file = await _localFile;
       await file.writeAsString(json.encode(_leghe.map((e) => e.toJson()).toList()));
