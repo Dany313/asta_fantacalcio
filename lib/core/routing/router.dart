@@ -1,12 +1,14 @@
 
 import 'package:asta_fantacalcio/core/routing/routes.dart';
-import 'package:asta_fantacalcio/feature/league/presentation/view_models/league_view_model.dart';
-import 'package:asta_fantacalcio/feature/manager/presentation/pages/managers_view.dart';
-import 'package:asta_fantacalcio/feature/manager/presentation/view_models/manager_view_model.dart';
+import 'package:asta_fantacalcio/presentation/viewmodels/leagues/league_view_model.dart';
+import 'package:asta_fantacalcio/presentation/pages/managers/managers_page.dart';
+import 'package:asta_fantacalcio/presentation/viewmodels/managers/manager_view_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../feature/league/presentation/pages/leagues_view.dart';
+import '../../presentation/pages/auction/auction_page.dart';
+import '../../presentation/pages/leagues/leagues_page.dart';
+import '../../presentation/viewmodels/auction/asta_view_model.dart';
 
 
 // GoRouter configuration
@@ -39,17 +41,19 @@ final router = GoRouter(
         return ManagersView(viewModel: viewModel, leagueName: name,);
       },
     ),
-    // GoRoute(
-    //   path: '/asta/:name',
-    //   builder: (context, state) {
-    //     final name = state.pathParameters['name']!;
-    //     final viewModel = AstaViewModel(
-    //       legheRepository: context.read(),
-    //       giocatoriRepository: context.read(),
-    //       nomeLega: name,
-    //     );
-    //     return AstaView(viewModel: viewModel);
-    //   },
-    // ),
+    GoRoute(
+      path: '/asta/:name',
+      builder: (context, state) {
+        final name = state.pathParameters['name']!;
+        final viewModel = AstaViewModel(
+          auctionInitUseCase: context.read(),
+          addPlayerUseCase: context.read(),
+          removePlayerUseCase: context.read(),
+          searchPlayerUseCase: context.read(), leagueName: name,
+          selectManagerUseCase: context.read(), setBetUseCase: context.read(),
+        );
+        return AstaView(viewModel: viewModel);
+      },
+    ),
   ],
 );
