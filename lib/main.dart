@@ -1,10 +1,9 @@
-
-import 'package:asta_fantacalcio/config/dependencies.dart';
-import 'package:asta_fantacalcio/routing/router.dart';
-import 'package:asta_fantacalcio/theme/theme.dart';
-import 'package:asta_fantacalcio/views/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'core/config/dependencies.dart';
+import 'core/routing/router.dart';
+import 'core/theme/theme.dart';
 
 
 void main() async {
