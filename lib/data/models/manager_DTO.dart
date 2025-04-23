@@ -5,10 +5,10 @@ import '../../domain/entities/Manager.dart';
 
 class ManagerDTO{
   final String nome;
-  final int numP;
-  final int numD;
-  final int numC;
-  final int numA;
+   int numP;
+   int numD;
+   int numC;
+   int numA;
   final Map<String,int> giocatori;
 
   ManagerDTO({
@@ -53,7 +53,7 @@ class ManagerDTO{
     };
   }
 
-  Manager mapModeltoEntity(){
+  Manager mapModelToEntity(){
     return  Manager(nome: nome, numP: numP, numD: numD, numC: numC, numA: numA, giocatori: giocatori);
   }
 }

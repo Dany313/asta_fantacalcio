@@ -1,15 +1,13 @@
+import 'package:asta_fantacalcio/service_locator.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'core/config/dependencies.dart';
 import 'core/routing/router.dart';
 import 'core/theme/theme.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MultiProvider(providers: providersLocal,
-  child: MyApp(),));
+  await initializeDependencies();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

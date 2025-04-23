@@ -1,16 +1,12 @@
 
-import '../../../core/utils/result.dart';
+import 'package:asta_fantacalcio/service_locator.dart';
+import 'package:dartz/dartz.dart';
+
 import '../../repositories/leghe_repository.dart';
 
 class AddLeagueUseCase {
-  AddLeagueUseCase({required LegheRepository legheRepository})
-      : _legheRepository = legheRepository;
 
-  final LegheRepository _legheRepository;
-
-  Future<Result<void>> addLeague(String nomeLega, int maxBudget) async {
-      print("Aggiungendo lega: $nomeLega con budget: $maxBudget");
-      final result = await _legheRepository.addLega(nomeLega, maxBudget);
-      return result;
+  Future<Either> call(String nomeLega, int maxBudget) async {
+    return await serviceLocator<LegheRepository>().addLega(nomeLega, maxBudget);
   }
 }

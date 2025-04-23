@@ -1,16 +1,10 @@
-import '../../../../core/utils/result.dart';
+import 'package:dartz/dartz.dart';
 import '../../../../domain/repositories/leghe_repository.dart';
+import '../../../service_locator.dart';
 
 class ClearLeagueUseCase {
-  ClearLeagueUseCase({
-    required LegheRepository legheRepository
-  }): _legheRepository = legheRepository;
 
-  final LegheRepository _legheRepository;
-
-  Future<Result<void>> clear() async {
-    print("Rimuovendo leghe");
-    final result = await _legheRepository.clearLegheList();
-    return result;
+  Future<Either> call() async {
+    return await serviceLocator<LegheRepository>().clearLegheList();
   }
 }

@@ -1,20 +1,16 @@
 import 'package:asta_fantacalcio/domain/repositories/auction_repository.dart';
+import 'package:dartz/dartz.dart';
 
 import '../../../core/utils/result.dart';
+import '../../../service_locator.dart';
 import '../../entities/Auction.dart';
 
 class RemovePlayerUseCase {
-  RemovePlayerUseCase({required AuctionRepository auctionRepository})
-      : _auctionRepository = auctionRepository;
 
-  final AuctionRepository _auctionRepository;
+  Future<Either> call(String leagueName, String managerName, String playerName) async {
+    print("Rimuovendo giocatore: $playerName al manager $managerName");
+    return await serviceLocator<AuctionRepository>()
+        .removePlayerFromManager(leagueName, managerName, playerName);
 
-  Future<Result<void>> call(Auction auction) async {
-    print("Rimuovendo giocatore: ${auction.selectedPlayer} al manager ${auction.selectedManager}");
-    final result = await _auctionRepository.removePlayerFromManager(
-        auction.league.nome,
-        auction.selectedManager,
-        auction.selectedPlayer);
-    return result;
   }
 }

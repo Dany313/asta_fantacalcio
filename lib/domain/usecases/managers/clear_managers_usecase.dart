@@ -1,15 +1,11 @@
-import '../../../core/utils/result.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../service_locator.dart';
 import '../../repositories/managers_repository.dart';
 
 class ClearManagersUseCase {
-  ClearManagersUseCase({required ManagersRepository managersRepository})
-      : _managersRepository = managersRepository;
 
-  final ManagersRepository _managersRepository;
-
-  Future<Result<void>> clearManagers(String leagueName) async {
-    print("Caricamento partecipanti...");
-    final result = await _managersRepository.clearManagersFromLeague(leagueName);
-    return result;
+  Future<Either> call(String leagueName) async {
+    return await serviceLocator<ManagersRepository>().clearManagersFromLeague(leagueName);
   }
 }

@@ -1,15 +1,12 @@
-import '../../../core/utils/result.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../service_locator.dart';
 import '../../repositories/managers_repository.dart';
 
 class AddManagerUseCase {
-  AddManagerUseCase({required ManagersRepository managersRepository})
-      : _managersRepository = managersRepository;
 
-  final ManagersRepository _managersRepository;
-
-  Future<Result<void>> addManager(String nomeLega, String managerName) async {
+  Future<Either> call(String nomeLega, String managerName) async {
     print("Aggiungendo partecipante: $managerName alla lega: $nomeLega");
-    final result = await _managersRepository.addManagerToLeague(nomeLega, managerName);
-    return result;
+    return await serviceLocator<ManagersRepository>().addManagerToLeague(nomeLega, managerName);
   }
 }

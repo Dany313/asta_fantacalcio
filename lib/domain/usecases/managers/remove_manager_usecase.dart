@@ -1,15 +1,13 @@
-import '../../../core/utils/result.dart';
+import 'package:dartz/dartz.dart';
+
+import '../../../service_locator.dart';
 import '../../repositories/managers_repository.dart';
 
 class RemoveManagerUseCase {
-  RemoveManagerUseCase({required ManagersRepository managersRepository})
-      : _managersRepository = managersRepository;
 
-  final ManagersRepository _managersRepository;
-
-  Future<Result<void>> removeManager(String nomeLega, String managerName) async {
+  Future<Either> call(String nomeLega, String managerName) async {
     print("Rimuovo partecipante: $managerName alla lega: $nomeLega");
-    final result = await _managersRepository.removeManagerFromLeague(nomeLega, managerName);
-    return result;
+    return await serviceLocator<ManagersRepository>().removeManagerFromLeague(nomeLega, managerName);
+
   }
 }

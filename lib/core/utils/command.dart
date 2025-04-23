@@ -8,9 +8,9 @@ import 'package:flutter/foundation.dart';
 
 import 'result.dart';
 
-typedef CommandAction0<T> = Future<Result<T>> Function();
-typedef CommandAction1<T, A> = Future<Result<T>> Function(A);
-typedef CommandAction2<T, A, B> = Future<Result<T>> Function(A,B);
+typedef CommandAction0<T> = Future<T> Function();
+typedef CommandAction1<T, A> = Future<T> Function(A);
+typedef CommandAction2<T, A, B> = Future<T> Function(A,B);
 
 /// Facilitates interaction with a ViewModel.
 ///
@@ -33,7 +33,7 @@ abstract class Command<T> extends ChangeNotifier {
   /// True when the action is running.
   bool get running => _running;
 
-  Result<T>? _result;
+  T? _result;
 
   /// true if action completed with error
   bool get error => _result is Error;
@@ -42,7 +42,7 @@ abstract class Command<T> extends ChangeNotifier {
   bool get completed => _result is Ok;
 
   /// Get last action result
-  Result? get result => _result;
+  T? get result => _result;
 
   /// Clear last action result
   void clearResult() {

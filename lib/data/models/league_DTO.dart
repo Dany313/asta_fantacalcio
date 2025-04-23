@@ -43,7 +43,7 @@ class LeagueDTO {
     };
   }
   
-  League mapModeltoEntity(){
+  League mapModelToEntity(){
     List<Manager> tempList = [];
     for(ManagerDTO p in partecipanti) {
       tempList.add( Manager(nome: p.nome, numP: p.numP, numD: p.numD, numC: p.numC, numA: p.numA, giocatori: p.giocatori));

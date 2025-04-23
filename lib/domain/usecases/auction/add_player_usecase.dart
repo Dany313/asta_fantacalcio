@@ -1,22 +1,21 @@
 import 'package:asta_fantacalcio/domain/repositories/auction_repository.dart';
+import 'package:asta_fantacalcio/domain/repositories/players_repository.dart';
+import 'package:dartz/dartz.dart';
 
-import '../../../core/utils/result.dart';
-import '../../entities/Auction.dart';
+import '../../../service_locator.dart';
 
 class AddPlayerUseCase {
-  AddPlayerUseCase({required AuctionRepository auctionRepository})
-      : _auctionRepository = auctionRepository;
 
-  final AuctionRepository _auctionRepository;
-
-  Future<Result<void>> call(Auction auction) async {
-    print("Aggiungendo giocatore: ${auction.selectedPlayer} al manager ${auction.selectedManager} con prezzo: ${auction.currentBet}");
-    final result = await _auctionRepository.addPlayerToManager(
-        auction.league.nome,
-        auction.selectedManager,
-        auction.selectedPlayer,
-        auction.currentBet
+  Future<Either> call(String leagueName, String managerName, String playerName, int price) async {
+    print("Aggiungendo giocatore: $playerName al manager $managerName con prezzo: $price");
+    String role = '';
+    final result = await serviceLocator<PlayersRepository>().getPLayerRole(playerName);
+    result.fold(
+          (error) => print(error),
+          (success) => role = success,
     );
-    return result;
+    return await serviceLocator<AuctionRepository>()
+        .addPlayerToManager(leagueName, managerName, playerName, role, price);
+
   }
 }

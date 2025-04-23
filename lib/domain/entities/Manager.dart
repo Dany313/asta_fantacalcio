@@ -1,9 +1,9 @@
 class Manager {
   final String nome;
-  final int numP;
-  final int numD;
-  final int numC;
-  final int numA;
+   int numP;
+   int numD;
+   int numC;
+   int numA;
   final Map<String, int> giocatori;
 
   Manager({

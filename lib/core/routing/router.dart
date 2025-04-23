@@ -4,7 +4,6 @@ import 'package:asta_fantacalcio/presentation/viewmodels/leagues/league_view_mod
 import 'package:asta_fantacalcio/presentation/pages/managers/managers_page.dart';
 import 'package:asta_fantacalcio/presentation/viewmodels/managers/manager_view_model.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import '../../presentation/pages/auction/auction_page.dart';
 import '../../presentation/pages/leagues/leagues_page.dart';
@@ -18,13 +17,7 @@ final router = GoRouter(
     GoRoute(
       path: Routes.home,
       builder: (context, state) {
-        final viewModel = LeagueViewModel(
-          leaguesUseCase: context.read(),
-          addLeagueUseCase: context.read(),
-          removeLeagueUseCase: context.read(),
-          clearLeagueUseCase: context.read(),
-        );
-        return LeaguesView(viewModel: viewModel);
+        return LeaguesView(viewModel: LeagueViewModel());
       },
     ),
     GoRoute(
@@ -32,10 +25,6 @@ final router = GoRouter(
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         final viewModel = ManagerViewModel(
-            managersUseCase: context.read(),
-            addManagerUseCase: context.read(),
-            removeManagerUseCase: context.read(),
-            clearManagersUseCase: context.read(),
             leagueName: name,
         );
         return ManagersView(viewModel: viewModel, leagueName: name,);
@@ -46,11 +35,7 @@ final router = GoRouter(
       builder: (context, state) {
         final name = state.pathParameters['name']!;
         final viewModel = AstaViewModel(
-          auctionInitUseCase: context.read(),
-          addPlayerUseCase: context.read(),
-          removePlayerUseCase: context.read(),
-          searchPlayerUseCase: context.read(), leagueName: name,
-          selectManagerUseCase: context.read(), setBetUseCase: context.read(),
+            leagueName: name
         );
         return AstaView(viewModel: viewModel);
       },

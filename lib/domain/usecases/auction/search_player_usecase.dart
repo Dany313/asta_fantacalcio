@@ -1,15 +1,12 @@
 import 'package:asta_fantacalcio/domain/repositories/players_repository.dart';
+import 'package:dartz/dartz.dart';
 
-import '../../../core/utils/result.dart';
-import '../../entities/Player.dart';
+import '../../../service_locator.dart';
+
 
 class SearchPlayerUseCase {
 
-  Result<List<String>> call(String playerName, Map<String, Player> players) {
-
-    return Result.ok(players.keys
-        .where((player) => player.toUpperCase().contains(playerName.toUpperCase()))
-        .toList()
-    );
+  Future<Either> call(String playerName) async {
+    return await serviceLocator<PlayersRepository>().searchPlayer(playerName);
   }
 }

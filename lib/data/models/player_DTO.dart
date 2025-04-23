@@ -1,14 +1,14 @@
 
 import '../../domain/entities/Player.dart';
 
-class Giocatore {
+class PlayerDTO {
   final int id;
   final String nome;
   final String squadra;
   final String ruolo;
   final int quotAttuale;
 
-  Giocatore({
+  PlayerDTO({
     required this.id,
     required this.nome,
     required this.squadra,
@@ -16,8 +16,8 @@ class Giocatore {
     required this.quotAttuale
   });
 
-  factory Giocatore.fromJson(Map<String, dynamic> json) {
-    return Giocatore(
+  factory PlayerDTO.fromJson(Map<String, dynamic> json) {
+    return PlayerDTO(
       id: json['Id'] as int,
       nome: json['Nome'] as String,
       squadra: json['Squadra'] as String,
@@ -36,7 +36,7 @@ class Giocatore {
     };
   }
 
-  Player mapModeltoEntity(){
+  Player mapModelToEntity(){
     return Player(id: id, nome: nome, squadra: squadra, ruolo: ruolo, quotAttuale: quotAttuale);
   }
 
