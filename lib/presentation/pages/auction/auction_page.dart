@@ -1,3 +1,4 @@
+import 'package:asta_fantacalcio/presentation/widgets/bet_panel.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/auction/asta_view_model.dart';
 import '../../widgets/allenatore_widget.dart';
@@ -194,30 +195,32 @@ class _AstaViewState extends State<AstaView> {
             ),
           ];
         },
-        body: ListenableBuilder(
-          listenable: widget.viewModel,
-          builder: (context, _) {
-            return ListView.builder(
-              itemCount: widget.viewModel.managers.length,
-              itemBuilder: (context, index) {
-                final partecipante = widget.viewModel.managers[index];
-                return GestureDetector(
-                  onTap: () {
-                    widget.viewModel.selectManager(partecipante.nome);
+        body: Column(
+          children: [
+            BetPanel(),
+            Expanded(
+              child: ListenableBuilder(
+                listenable: widget.viewModel,
+                builder: (context, _) {
+                  return ListView.builder(
+                    itemCount: widget.viewModel.managers.length,
+                    itemBuilder: (context, index) {
+                      final partecipante = widget.viewModel.managers[index];
+                      return GestureDetector(
+                        onTap: () {
+                          widget.viewModel.selectManager(partecipante.nome);
 
-                  },
-                  child: Card(
-                    color: widget.viewModel.managers[index].nome == widget.viewModel.selectedManager
-                        ? Theme.of(context).colorScheme.primaryContainer
-                        : null,
-                    child: AllenatoreWidget(
-                      partecipante: partecipante,
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+                        },
+                        child: AllenatoreWidget(
+                          partecipante: partecipante, isAuction: true,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

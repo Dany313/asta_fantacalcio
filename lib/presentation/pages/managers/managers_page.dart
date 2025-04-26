@@ -59,11 +59,14 @@ class _ManagersViewState extends State<ManagersView> {
             itemCount: widget.viewModel.managers.length,
             itemBuilder: (context, index)  {
               final partecipante = widget.viewModel.managers[index];
-              return Card(
-                child: AllenatoreWidget(
-                    partecipante: partecipante,
-                    deletePartecipante: widget.viewModel.removeManager
-              ));
+              return Column(
+                children: [
+                  AllenatoreWidget(
+                      partecipante: partecipante,
+                      deletePartecipante: widget.viewModel.removeManager, isAuction: false,
+                                ),
+                ],
+              );
             },
           );
         },

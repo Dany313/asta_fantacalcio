@@ -33,8 +33,8 @@ final myTheme = ThemeData(
 
 // Card
   cardTheme: CardTheme(
-    color: Colors.deepPurple[900],
-    elevation: 4,
+    //color: Colors.deepPurple[900],
+    elevation: 1,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(16),
     ),
@@ -47,9 +47,7 @@ final myTheme = ThemeData(
     iconColor: Colors.greenAccent[400],
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(25),
-      side: BorderSide(
-          color: Colors.greenAccent[400] ?? Colors.greenAccent,
-          width: 3),
+
     ),
   ),
 
@@ -57,7 +55,7 @@ final myTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: Colors.greenAccent[400],
-      foregroundColor: Colors.black87,
+      //foregroundColor: Colors.black87,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
