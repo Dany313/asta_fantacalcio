@@ -1,7 +1,7 @@
 
 
 
-import '../../domain/entities/Manager.dart';
+import '../../domain/entities/manager.dart';
 
 class ManagerDTO{
   final String nome;
@@ -53,7 +53,9 @@ class ManagerDTO{
     };
   }
 
-  Manager mapModelToEntity(){
-    return  Manager(nome: nome, numP: numP, numD: numD, numC: numC, numA: numA, giocatori: giocatori);
+  Manager mapModelToEntity(int maxBudget){
+    final totalPlayerCost =
+        giocatori.values.fold(0, (sum, cost) => sum + cost);
+    return  Manager(nome: nome, numP: numP, numD: numD, numC: numC, numA: numA, giocatori: giocatori, budget: maxBudget - totalPlayerCost);
   }
 }

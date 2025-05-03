@@ -1,90 +1,78 @@
 import 'package:flutter/material.dart';
 
 class BetPanel extends StatelessWidget {
-  const BetPanel({super.key});
+  final int bet;
+  final ValueChanged<int> onBetChanged;
+
+  const BetPanel({
+    super.key,
+    required this.bet,
+    required this.onBetChanged,
+  });
+
+  // Lista dei valori per i pulsanti
+  static const List<int> _steps = [-1, 1, 5, 10, -10];
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,   // direzione orizzontale sinistra→destra
+        gradient: const LinearGradient(
+          begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFFCA5AFF),  // stop 0%
-            Color(0xFF642DD3),  // stop 100%
-          ],
-          // se vuoi personalizzare le stop positions (qui sono 0 e 1 di default):
-          // stops: [0.0, 1.0],
+          colors: [Color(0xFFCA5AFF), Color(0xFF642DD3)],
         ),
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.all(Radius.elliptical(25, 25)),
+        borderRadius: BorderRadius.circular(25),
       ),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Text("Puntata",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12
-                  ),),
-                  Text("10",
-                    style: TextStyle(
-                        color: Colors.white,
-                      fontSize: 20
-                    ),),
-                ],
-              ),
-          VerticalDivider(
-            color: Colors.white,
-            thickness: 1,    // spessore di 1px
-            width: 20,       // spazio orizzontale complessivo
-            indent: 8,       // margine superiore
-            endIndent: 8,    // margine inferiore
-          ),
-              TextButton(onPressed: (){},
-              style: ButtonStyle(
-                shape: WidgetStateProperty.all(CircleBorder()),
-                // dimensione fissa del bottone
-                fixedSize: WidgetStateProperty.all(Size(20, 20)),
-                // oppure, se usi una versione di Flutter più vecchia:
-                // minimumSize: MaterialStateProperty.all(Size(32, 32)),
-                backgroundColor: WidgetStateProperty.all(Colors.greenAccent),
-                foregroundColor: WidgetStateProperty.all(Color.fromRGBO(50, 0, 153, 1)),
-                padding: WidgetStateProperty.all(EdgeInsets.zero), // rimuove padding interno
-              ),
-                  child: Text("+1"),),
-              TextButton(onPressed: (){},
-                style: ButtonStyle(
-                  shape: WidgetStateProperty.all(CircleBorder()),
-                  // dimensione fissa del bottone
-                  fixedSize: WidgetStateProperty.all(Size(20, 20)),
-                  // oppure, se usi una versione di Flutter più vecchia:
-                  // minimumSize: MaterialStateProperty.all(Size(32, 32)),
-                  backgroundColor: WidgetStateProperty.all(Colors.greenAccent),
-                  foregroundColor: WidgetStateProperty.all(Color.fromRGBO(50, 0, 153, 1)),
-                  padding: WidgetStateProperty.all(EdgeInsets.zero), // rimuove padding interno
+          children: [
+            // Mostra la puntata corrente come testo
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Puntata',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
-                child: Text("+5"),),
-              TextButton(onPressed: (){},
-                style: ButtonStyle(
-                  shape: WidgetStateProperty.all(CircleBorder()),
-                  // dimensione fissa del bottone
-                  fixedSize: WidgetStateProperty.all(Size(20, 20)),
-                  // oppure, se usi una versione di Flutter più vecchia:
-                  // minimumSize: MaterialStateProperty.all(Size(32, 32)),
-                  backgroundColor: WidgetStateProperty.all(Colors.greenAccent),
-                  foregroundColor: WidgetStateProperty.all(Color.fromRGBO(50, 0, 153, 1)),
-                  padding: WidgetStateProperty.all(EdgeInsets.zero), // rimuove padding interno
+                Text(
+                  bet.toString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
                 ),
-                child: Text("+10"),),
-            ],
+              ],
+            ),
+            const VerticalDivider(
+              color: Colors.white,
+              thickness: 1,
+              width: 20,
+              indent: 8,
+              endIndent: 8,
+            ),
+            // Pulsanti generati da lista
+            ..._steps.map((step) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 1),
+                child: TextButton(
+                  onPressed: () => onBetChanged(step),
+                  style: TextButton.styleFrom(
+                    shape: const CircleBorder(),
+                    fixedSize: const Size(32, 32),
+                    backgroundColor: Colors.greenAccent,
+                    foregroundColor: const Color.fromRGBO(50, 0, 153, 1),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Text(
+                    step > 0 ? '+$step' : '$step',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                ),
+              );
+            }),
+          ],
         ),
       ),
-
     );
   }
 }

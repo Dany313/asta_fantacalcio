@@ -9,17 +9,10 @@ import '../../entities/player.dart';
 import '../../repositories/managers_repository.dart';
 import '../../repositories/players_repository.dart';
 
-class AuctionInitUseCase {
+class GetLeagueUseCase {
 
-  _filterPlayerList(League league, Map<String, Player> players){
-    league.partecipanti.map(
-            (manager) => manager.giocatori.keys.map(
-                    (player) => players.remove(player)));
-  }
-
-
-  Future<Either> call() async {
-    return await serviceLocator<PlayersRepository>().getPLayers();
+  Future<Either> call(String leagueName) async {
+    return await serviceLocator<LegheRepository>().getLega(leagueName);
 
   }
 }

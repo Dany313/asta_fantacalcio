@@ -4,6 +4,7 @@ class Manager {
    int numD;
    int numC;
    int numA;
+   int budget;
   final Map<String, int> giocatori;
 
   Manager({
@@ -12,6 +13,7 @@ class Manager {
     required this.numD,
     required this.numC,
     required this.numA,
+    required this.budget,
     required this.giocatori
   });
 }

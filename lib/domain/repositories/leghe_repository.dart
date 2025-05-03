@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/utils/result.dart';
-import '../entities/League.dart';
+import '../entities/league.dart';
 
 abstract class LegheRepository {
   Future<Either> getLegheList();

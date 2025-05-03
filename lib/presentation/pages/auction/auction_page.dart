@@ -1,227 +1,148 @@
-import 'package:asta_fantacalcio/presentation/widgets/bet_panel.dart';
 import 'package:flutter/material.dart';
+import 'package:asta_fantacalcio/presentation/widgets/bet_panel.dart';
 import '../../viewmodels/auction/asta_view_model.dart';
 import '../../widgets/allenatore_widget.dart';
-import '../../widgets/select_player_dialog.dart';
-import '../../widgets/set_bet_dialog.dart';
 
-class AstaView extends StatefulWidget {
-  const AstaView({super.key, required this.viewModel});
+class AuctionPage extends StatefulWidget {
+  const AuctionPage({Key? key, required this.viewModel}) : super(key: key);
 
   final AstaViewModel viewModel;
 
   @override
-  State<AstaView> createState() => _AstaViewState();
+  State<AuctionPage> createState() => _AuctionPageState();
 }
 
-class _AstaViewState extends State<AstaView> {
-  final TextEditingController searchController = TextEditingController();
+class _AuctionPageState extends State<AuctionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverAppBar(
-              pinned: true,
-              title: const Text("ASTA"),
-              automaticallyImplyLeading: true,
-              actions: [
-                FilledButton(
-                    onPressed: () {
-                      // Logic to end the auction
-                    },
-                    child: const Row(
-                      children: [
-                        Icon(Icons.flag),
-                        SizedBox(width: 3),
-                        Text("Termina"),
-                      ],
-                    )
-                )
-              ],
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(70),
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Theme.of(context).primaryColor.withOpacity(0.1),
-                  child: Row(
-                    children: [
-                      // Current bet counter with plus/minus buttons
-                      Expanded(
-                        flex: 4,
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    widget.viewModel.setBet(-1);
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                ),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      showSetBetDialog(
-                                        context,
-                                        initialValue: 0, // Il valore attuale della bet
-                                        onConfirm: (newBet) {
-                                          setState(() {
-                                            widget.viewModel.setBet(newBet);
-                                            // Aggiorna il valore nel viewModel se necessario
-                                            // widget.viewModel.updateBet(newBet);
-                                          });
-                                        },
-                                      );
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                      alignment: Alignment.center,
-                                      child: ListenableBuilder(
-                                          listenable: widget.viewModel,
-                                          builder: (context, _) {
-                                            return Text(
-                                              widget.viewModel.currentBet.toString(),
-                                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                            );
-                                          }
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    widget.viewModel.setBet(1);
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ],
-                            ),
+      appBar: AppBar(
+        title: const Text('ASTA'),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              // Logic to end the auction
+            },
+            child: const Row(
+              children: [Icon(Icons.flag), SizedBox(width: 3), Text('Termina')],
+            ),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          // Card con info giocatore selezionato
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Row(
+                  children: [
+                    // Dati del giocatore: ruolo, nome, squadra
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.viewModel.players[widget.viewModel.selectedPlayer]?.ruolo ?? '-',
+                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                           ),
-                        ),
-                      ),
-                      // Search player button
-                      // Modifica il pulsante di ricerca giocatore nell'AstaView
-                      // Modifica il pulsante di ricerca giocatore nell'AstaView
-                      Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: ListenableBuilder(
-                            listenable: widget.viewModel,
-                            builder: (context, _) {
-                              // Stampa di debug per verificare il valore
-                              print("Rendering button with player: ${widget.viewModel.selectedPlayer}");
-
-                              return ElevatedButton(
-                                onPressed: () {
-                                  widget.viewModel.searchPlayer.execute('');
-                                  showSelectPlayerDialog(
-                                    context,
-                                    players: widget.viewModel.searchPlayerList,
-                                    initialPlayer: widget.viewModel.selectedPlayer,
-                                    onResult: (searchText, selectedPlayer) {
-                                      // Il viewModel dovrebbe avere un metodo per filtrare i giocatori
-                                      widget.viewModel.searchPlayer.execute(searchText);
-
-                                      // Se viene selezionato un giocatore, aggiorna il viewModel
-                                      if (selectedPlayer != null) {
-                                        print("selezionato: $selectedPlayer");
-                                        widget.viewModel.selectPlayer(selectedPlayer);
-                                      }
-                                    },
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Icon(Icons.search),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        widget.viewModel.selectedPlayer ?? 'Cerca giocatore',
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold, // Rendilo più visibile
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
+                          const SizedBox(height: 4),
+                          Text(
+                            widget.viewModel.players[widget.viewModel.selectedPlayer]?.nome ?? '-',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ),
-                      // Assign player button
-                      Expanded(
-                        flex: 3,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 4.0),
-                          child: ListenableBuilder(
-                            listenable: widget.viewModel,
-                            builder: (context, _) {
-                              // Controlla se tutte le condizioni sono soddisfatte
-                              final bool canAssign =
-                                  widget.viewModel.currentBet > 0 &&
-                                      widget.viewModel.selectedPlayer != '' &&
-                                      widget.viewModel.selectedManager != '';
-
-                              return FilledButton(
-                                onPressed: canAssign
-                                    ? () {
-                                  widget.viewModel.addPlayer.execute();
-                                }
-                                    : null, // Disabilita il pulsante se non sono soddisfatte le condizioni
-                                style: FilledButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
-                                ),
-                                child: const Text('Aggiudica'),
-                              );
-                            },
+                          const SizedBox(height: 4),
+                          Text(
+                            widget.viewModel.players[widget.viewModel.selectedPlayer]?.squadra ?? '-',
+                            style: const TextStyle(fontSize: 14),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    // Pulsante in alto a destra
+                    IconButton(
+                      onPressed: () {
+                        widget.viewModel.clearAuction();
+                      },
+                      icon: const Icon(Icons.close, size: 20),
+                    ),
+                    // Pulsante "Aggiudica"
+                    ListenableBuilder(
+                      listenable: widget.viewModel,
+                      builder: (context, _) {
+                        return FilledButton(
+                          onPressed: (widget.viewModel.currentBet > 0 &&
+                              widget.viewModel.selectedPlayer.isNotEmpty &&
+                              widget.viewModel.selectedManager.isNotEmpty)
+                              ? () {
+                            widget.viewModel.addPlayer.execute();
+                          }
+                              : null,
+                          child: const Text('Aggiudica'),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
             ),
-          ];
-        },
-        body: Column(
-          children: [
-            BetPanel(),
-            Expanded(
-              child: ListenableBuilder(
-                listenable: widget.viewModel,
-                builder: (context, _) {
-                  return ListView.builder(
-                    itemCount: widget.viewModel.managers.length,
-                    itemBuilder: (context, index) {
-                      final partecipante = widget.viewModel.managers[index];
-                      return GestureDetector(
-                        onTap: () {
-                          widget.viewModel.selectManager(partecipante.nome);
+          ),
 
-                        },
-                        child: AllenatoreWidget(
-                          partecipante: partecipante, isAuction: true,
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
+          // BetPanel
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ListenableBuilder(
+              listenable: widget.viewModel,
+              builder: (context, _) {
+                return BetPanel(
+                  bet: widget.viewModel.currentBet,
+                  onBetChanged: (value) => widget.viewModel.setBet(value),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+
+          const SizedBox(height: 8),
+
+          // Lista manager scrollabile
+          Expanded(
+            child: ListenableBuilder(
+              listenable: widget.viewModel,
+              builder: (context, _) {
+                return ListView.builder(
+                  itemCount: widget.viewModel.managers.length,
+                  itemBuilder: (context, index) {
+                    final manager = widget.viewModel.managers[index];
+                    final isSelected = widget.viewModel.selectedManager == manager.nome;
+                    final canBuy = widget.viewModel.canManagerBuy(index);
+                    return GestureDetector(
+                      onTap: canBuy ? () => widget.viewModel.selectManager(manager.nome) : null,
+                      child: Opacity(
+                        opacity: canBuy ? 1.0 : 0.5,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: isSelected ? Colors.green : Colors.transparent,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: AllenatoreWidget(
+                            partecipante: manager,
+                            isAuction: true,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

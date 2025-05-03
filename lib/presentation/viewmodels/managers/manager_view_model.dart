@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/utils/command.dart';
-import '../../../domain/entities/Manager.dart';
+import '../../../domain/entities/manager.dart';
 import '../../../domain/usecases/managers/add_manager_usecase.dart';
 import '../../../domain/usecases/managers/clear_managers_usecase.dart';
 import '../../../domain/usecases/managers/managers_usecase.dart';

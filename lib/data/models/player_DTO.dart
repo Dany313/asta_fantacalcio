@@ -1,5 +1,5 @@
 
-import '../../domain/entities/Player.dart';
+import '../../domain/entities/player.dart';
 
 class PlayerDTO {
   final int id;

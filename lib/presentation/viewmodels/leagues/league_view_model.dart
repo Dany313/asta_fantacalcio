@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../core/utils/command.dart';
 import '../../../core/utils/result.dart';
-import '../../../domain/entities/League.dart';
+import '../../../domain/entities/league.dart';
 import '../../../domain/usecases/leagues/add_league_usecase.dart';
 import '../../../domain/usecases/leagues/clear_leagues_usecase.dart';
 import '../../../domain/usecases/leagues/leagues_usecase.dart';

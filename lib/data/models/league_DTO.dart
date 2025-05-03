@@ -1,7 +1,7 @@
 
 
-import '../../domain/entities/League.dart';
-import '../../domain/entities/Manager.dart';
+import '../../domain/entities/league.dart';
+import '../../domain/entities/manager.dart';
 import 'manager_DTO.dart';
 
 class LeagueDTO {
@@ -46,7 +46,16 @@ class LeagueDTO {
   League mapModelToEntity(){
     List<Manager> tempList = [];
     for(ManagerDTO p in partecipanti) {
-      tempList.add( Manager(nome: p.nome, numP: p.numP, numD: p.numD, numC: p.numC, numA: p.numA, giocatori: p.giocatori));
+      final totalPlayerCost =
+      p.giocatori.values.fold(0, (sum, cost) => sum + cost);
+      tempList.add( Manager(nome: p.nome,
+          numP: p.numP,
+          numD: p.numD,
+          numC: p.numC,
+          numA: p.numA,
+          giocatori: p.giocatori,
+          budget: maxBudget - totalPlayerCost
+      ));
     }
     return  League(nome: nome, maxBudget: maxBudget, partecipanti: tempList);
   }

@@ -5,7 +5,7 @@ import 'package:asta_fantacalcio/presentation/pages/managers/managers_page.dart'
 import 'package:asta_fantacalcio/presentation/viewmodels/managers/manager_view_model.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../presentation/pages/auction/auction_page.dart';
+import '../../presentation/pages/auction/main_page.dart';
 import '../../presentation/pages/leagues/leagues_page.dart';
 import '../../presentation/viewmodels/auction/asta_view_model.dart';
 
@@ -37,7 +37,7 @@ final router = GoRouter(
         final viewModel = AstaViewModel(
             leagueName: name
         );
-        return AstaView(viewModel: viewModel);
+        return MainPage(viewModel: viewModel);
       },
     ),
   ],

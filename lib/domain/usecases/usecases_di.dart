@@ -1,5 +1,7 @@
 import 'package:asta_fantacalcio/domain/usecases/auction/add_player_usecase.dart';
 import 'package:asta_fantacalcio/domain/usecases/auction/auction_init_usecase.dart';
+import 'package:asta_fantacalcio/domain/usecases/auction/get_league_usecase.dart';
+import 'package:asta_fantacalcio/domain/usecases/auction/get_players_usecase.dart';
 import 'package:asta_fantacalcio/domain/usecases/auction/remove_player_usecase.dart';
 import 'package:asta_fantacalcio/domain/usecases/auction/search_player_usecase.dart';
 import 'package:asta_fantacalcio/domain/usecases/leagues/add_league_usecase.dart';
@@ -47,6 +49,12 @@ Future<void> initializeUseCasesDI() async {
   );
 
   //AUCTION
+  serviceLocator.registerSingleton<GetPlayersUseCase>(
+      GetPlayersUseCase()
+  );
+  serviceLocator.registerSingleton<GetLeagueUseCase>(
+      GetLeagueUseCase()
+  );
   serviceLocator.registerSingleton<AddPlayerUseCase>(
       AddPlayerUseCase()
   );

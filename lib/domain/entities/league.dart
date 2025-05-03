@@ -1,4 +1,4 @@
-import 'Manager.dart';
+import 'manager.dart';
 
 class League {
   final String nome;

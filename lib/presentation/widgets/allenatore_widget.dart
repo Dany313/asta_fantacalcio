@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/command.dart';
-import '../../domain/entities/Manager.dart';
+import '../../domain/entities/manager.dart';
 import 'ManagerRecap.dart';
 import 'circular_delete_button.dart';
 
@@ -34,8 +34,11 @@ class AllenatoreWidget extends StatelessWidget {
             CircularDeleteButton()
           ],
         ),
-        subtitle: ManagerRecap(manager: partecipante, budget: "500", maxBet: "476"),
-        onTap: () {},
+        subtitle: ManagerRecap(
+            manager: partecipante,
+            budget: partecipante.budget,
+            maxBet: (partecipante.budget - (25 - partecipante.giocatori.length))
+        ),
       ),
     );
   }

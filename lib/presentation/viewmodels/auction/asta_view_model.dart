@@ -1,13 +1,15 @@
 
+import 'package:asta_fantacalcio/domain/entities/league.dart';
+import 'package:asta_fantacalcio/domain/usecases/auction/get_league_usecase.dart';
+import 'package:asta_fantacalcio/domain/usecases/auction/get_players_usecase.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../core/utils/command.dart';
 
-import '../../../domain/entities/Manager.dart';
+import '../../../domain/entities/manager.dart';
+import '../../../domain/entities/player.dart';
 import '../../../domain/usecases/auction/add_player_usecase.dart';
-import '../../../domain/usecases/auction/auction_init_usecase.dart';
 import '../../../domain/usecases/auction/remove_player_usecase.dart';
-import '../../../domain/usecases/auction/search_player_usecase.dart';
 import '../../../service_locator.dart';
 
 class AstaViewModel extends ChangeNotifier {
@@ -29,6 +31,8 @@ class AstaViewModel extends ChangeNotifier {
 
   List<String> searchPlayerList = [];
   List<Manager> managers = [];
+  Map<String, Player> players = {};
+  late League league;
 
   String selectedPlayer = '';
   String selectedManager = '';
@@ -39,15 +43,15 @@ class AstaViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setBet(int bet) {
-    if(bet + currentBet >= 0){
-      print("imposto puntata ${bet + currentBet}...");
-      currentBet += bet;
-    }
+  void setBet(int step) {
+    int newBet = currentBet + step;
+    if (newBet < 0) newBet = 0;
+    currentBet = newBet;
     notifyListeners();
   }
 
   void selectManager(String managerName) {
+    print("toggle manager $managerName");
     if(selectedManager != managerName){
       selectedManager = managerName;
     }else{
@@ -60,32 +64,47 @@ class AstaViewModel extends ChangeNotifier {
   Future<void> _initAuction() async {
     try {
       print("Caricamento asta...");
-      final result = await serviceLocator<AuctionInitUseCase>().call(leagueName);
-      result.fold(
+      final resultLeague = await serviceLocator<GetLeagueUseCase>().call(leagueName);
+      resultLeague.fold(
             (error) => print(error),
-            (managers) => this.managers = managers,
+            (league) => this.league = league,
       );
+      final resultPlayers = await serviceLocator<GetPlayersUseCase>().call();
+      resultPlayers.fold(
+            (error) => print(error),
+            (players) => this.players = players,
+      );
+
       currentBet = 0;
       selectedPlayer = '';
       selectedManager = '';
-      _searchPlayer('');
+
+      _filterPlayerList();
+      searchPlayerList = players.keys.toList();
+      managers = league.partecipanti;
     } finally {
       notifyListeners();
     }
   }
 
+  void _filterPlayerList() {
+    for (final manager in league.partecipanti) {
+      for (final player in manager.giocatori.keys) {
+        players.remove(player);
+      }
+    }
+  }
+
+
+
 
 
   Future<void> _searchPlayer(String playerName)  async {
     try {
-      print("Caricamento asta...");
-      final result = await serviceLocator<SearchPlayerUseCase>().call(playerName);
-      result.fold(
-            (error) => print(error),
-            (list) => searchPlayerList = list,
-      );
+      searchPlayerList = players.keys.where(
+              (player) => player.toUpperCase().contains(playerName.toUpperCase()))
+      .toList();
 
-      print("Ricaricamento leghe dopo remove...");
     } finally {
       notifyListeners();
     }
@@ -110,7 +129,48 @@ class AstaViewModel extends ChangeNotifier {
     }
   }
 
+  bool canManagerBuy(index) {
+
+    if(currentBet > managers[index].budget - (25 - managers[index].giocatori.length)){
+      print("prezzo superiore al budget");
+      return false;
+    }
+
+    if(managers[index].giocatori.length >= 25){
+      print("numero giocatori massimo raggiunto");
+      return false;
+    }
+
+    if(selectedPlayer != ''){
+      switch(players[selectedPlayer]!.ruolo) {
+        case 'P':  if(managers[index].numP >= 3){
+          return false;
+      } break;
+        case 'D':  if(managers[index].numD >= 8){
+          return false;
+        } break;
+        case 'C':  if(managers[index].numC >= 8){
+          return false;
+        } break;
+        case 'A':  if(managers[index].numA >= 6){
+          return false;
+        } break;
+    }
+
+    }
+
+    return true;
+  }
+
+  void clearAuction() {
+    currentBet = 0;
+    selectedPlayer = '';
+    selectedManager = '';
+    notifyListeners();
+  }
+
   Future<void> _addPlayer() async {
+
     try {
       final result = await serviceLocator<AddPlayerUseCase>().call(leagueName, selectedManager, selectedPlayer, currentBet);
       result.fold(

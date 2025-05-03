@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../domain/entities/Player.dart';
+import '../../domain/entities/player.dart';
 
 abstract class LeaguesService {
   Future<Either> getLegheList();

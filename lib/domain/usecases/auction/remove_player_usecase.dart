@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../core/utils/result.dart';
 import '../../../service_locator.dart';
-import '../../entities/Auction.dart';
+import '../../entities/auction.dart';
 
 class RemovePlayerUseCase {
 

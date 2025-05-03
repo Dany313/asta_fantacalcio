@@ -158,7 +158,7 @@ class LeaguesServiceJsonImpl implements LeaguesService {
             (element) => element.nome == leagueName,
         orElse: () => throw Exception("Lega non trovata"),
       );
-      return Right(league.partecipanti.map((element) => element.mapModelToEntity()).toList());
+      return Right(league.partecipanti.map((element) => element.mapModelToEntity(league.maxBudget)).toList());
     } catch (e) {
       return Left(e);
     }

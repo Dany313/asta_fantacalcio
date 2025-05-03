@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
 import '../../core/utils/result.dart';
-import '../entities/Manager.dart';
+import '../entities/manager.dart';
 
 abstract class ManagersRepository {
   Future<Either> addManagerToLeague(String nomeLega, String nomePartecipante);
