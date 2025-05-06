@@ -16,7 +16,7 @@ class AstaViewModel extends ChangeNotifier {
   AstaViewModel({required this.leagueName}){
     initAuction = Command0(_initAuction)..execute();
     addPlayer = Command0(_addPlayer);
-    removePlayer = Command0(_removePlayer);
+    removePlayer = Command2(_removePlayer);
     searchPlayer = Command1(_searchPlayer);
   }
 
@@ -26,13 +26,15 @@ class AstaViewModel extends ChangeNotifier {
 
   late final Command0 initAuction;
   late Command0 addPlayer;
-  late Command0 removePlayer;
+  late Command2<void,String,String> removePlayer;
   late Command1<void, String> searchPlayer;
 
   List<String> searchPlayerList = [];
   List<Manager> managers = [];
   Map<String, Player> players = {};
   late League league;
+
+  String selectedManagerPlayerList = '';
 
   String selectedPlayer = '';
   String selectedManager = '';
@@ -61,6 +63,11 @@ class AstaViewModel extends ChangeNotifier {
 
   }
 
+  void selectManagerPlayerList(String managerName) {
+    selectedManagerPlayerList = managerName;
+    notifyListeners();
+  }
+
   Future<void> _initAuction() async {
     try {
       print("Caricamento asta...");
@@ -75,13 +82,10 @@ class AstaViewModel extends ChangeNotifier {
             (players) => this.players = players,
       );
 
-      currentBet = 0;
-      selectedPlayer = '';
-      selectedManager = '';
-
       _filterPlayerList();
       searchPlayerList = players.keys.toList();
       managers = league.partecipanti;
+      selectedManagerPlayerList = managers[0].nome;
     } finally {
       notifyListeners();
     }
@@ -112,9 +116,9 @@ class AstaViewModel extends ChangeNotifier {
 
 
 
-  Future<void> _removePlayer() async {
+  Future<void> _removePlayer(String manager, String player) async {
     try {
-      final result = await serviceLocator<RemovePlayerUseCase>().call(leagueName, selectedManager, selectedPlayer);
+      final result = await serviceLocator<RemovePlayerUseCase>().call(leagueName, manager, player);
       result.fold(
             (error) => print(error),
             (success) => print(success),

@@ -15,5 +15,5 @@ abstract class LeaguesService {
   Future<Either> getManagersFromLeague(String leagueName);
 
   Future<Either> addPlayerToManager(String leagueName, String managerName, String playerName, String playerRole, int price);
-  Future<Either> removePlayerFromManager(String leagueName, String managerName, String playerName);
+  Future<Either> removePlayerFromManager(String leagueName, String managerName, String playerName, String playerRole);
 }

@@ -31,7 +31,7 @@ class _TeamsPageState extends State<TeamsPage> {
         listenable: widget.viewModel,
         builder: (context, _) {
           final managers = widget.viewModel.managers;
-          final selected = widget.viewModel.selectedManager;
+          final selected = widget.viewModel.selectedManagerPlayerList;
           final currentManager = managers.firstWhere(
                 (m) => m.nome == selected,
             orElse: () => managers.isNotEmpty ? managers[0] : throw StateError('No managers'),
@@ -56,7 +56,7 @@ class _TeamsPageState extends State<TeamsPage> {
                       label: Text(m.nome),
                       selected: isSel,
                       onSelected: (_) {
-                        widget.viewModel.selectManager(m.nome);
+                        widget.viewModel.selectManagerPlayerList(m.nome);
                       },
                     );
                   },
@@ -78,8 +78,7 @@ class _TeamsPageState extends State<TeamsPage> {
                         icon: const Icon(Icons.close),
                         onPressed: () {
                           // Imposto selectedPlayer e chiamo remove
-                          widget.viewModel.selectPlayer(playerName);
-                          widget.viewModel.removePlayer.execute();
+                          widget.viewModel.removePlayer.execute(currentManager.nome, playerName);
                         },
                       ),
                     );

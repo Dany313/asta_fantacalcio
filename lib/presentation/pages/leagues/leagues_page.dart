@@ -1,4 +1,5 @@
 import 'package:asta_fantacalcio/presentation/viewmodels/leagues/league_view_model.dart';
+import 'package:asta_fantacalcio/presentation/widgets/league_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -55,21 +56,7 @@ class _LeaguesViewState extends State<LeaguesView> {
             itemCount: widget.viewModel.leagues.length,
             itemBuilder: (context, index) {
               final lega = widget.viewModel.leagues[index];
-              return Card(
-                child: ListTile(
-                  title: Text(lega.nome),
-                  subtitle: Text("Partecipanti: ${lega.partecipanti.length}  Budget: ${lega.maxBudget}"),
-                  onTap: () => {
-                   context.push(Routes.legaWithName(lega.nome)),
-                  },
-                  trailing: IconButton(
-                    onPressed: () {
-                      widget.viewModel.removeLeague.execute(lega);
-                    },
-                    icon: Icon(Icons.close),
-                  ),
-                ),
-              );
+              return LeagueWidget(league: lega);
             },
           );
         },

@@ -188,11 +188,23 @@ class LeaguesServiceJsonImpl implements LeaguesService {
   }
 
   @override
-  Future<Either> removePlayerFromManager(String leagueName, String managerName, String playerName) async {
+  Future<Either> removePlayerFromManager(String leagueName, String managerName, String playerName, String playerRole) async {
     try {
       _leaguesList.firstWhere((element) => element.nome == leagueName)
           .partecipanti.firstWhere((element) => element.nome == managerName)
           .giocatori.remove(playerName);
+
+      switch (playerRole) {
+        case 'P': _leaguesList.firstWhere((element) => element.nome == leagueName)
+            .partecipanti.firstWhere((element) => element.nome == managerName).numP -= 1; break;
+        case 'D': _leaguesList.firstWhere((element) => element.nome == leagueName)
+            .partecipanti.firstWhere((element) => element.nome == managerName).numD -= 1; break;
+        case 'C': _leaguesList.firstWhere((element) => element.nome == leagueName)
+            .partecipanti.firstWhere((element) => element.nome == managerName).numC -= 1; break;
+        case 'A': _leaguesList.firstWhere((element) => element.nome == leagueName)
+            .partecipanti.firstWhere((element) => element.nome == managerName).numA -= 1; break;
+      }
+
       _updateLocalFile();
       return Right(null);
     }catch (e) {

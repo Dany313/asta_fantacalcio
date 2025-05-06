@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
+import '../../core/utils/command.dart';
+
 class CircularDeleteButton extends StatelessWidget {
-  const CircularDeleteButton({super.key});
+  final Command1<void, String>? delete;
+  final String deleteParam;
+  const CircularDeleteButton({super.key,required this.delete, required this.deleteParam});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () { },
+      onPressed: () {
+        delete!.execute(deleteParam);
+      },
       iconSize: 16, // dimensione dell’icona interna, a piacere
       style: ButtonStyle(
         // dimensione fissa del bottone

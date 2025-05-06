@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:asta_fantacalcio/presentation/widgets/bet_panel.dart';
+import 'package:asta_fantacalcio/presentation/widgets/auction_panel.dart';
+import '../../../domain/entities/player.dart';
 import '../../viewmodels/auction/asta_view_model.dart';
 import '../../widgets/allenatore_widget.dart';
 
@@ -20,9 +21,7 @@ class _AuctionPageState extends State<AuctionPage> {
         title: const Text('ASTA'),
         actions: [
           FilledButton(
-            onPressed: () {
-              // Logic to end the auction
-            },
+            onPressed: (){},
             child: const Row(
               children: [Icon(Icons.flag), SizedBox(width: 3), Text('Termina')],
             ),
@@ -31,77 +30,24 @@ class _AuctionPageState extends State<AuctionPage> {
       ),
       body: Column(
         children: [
-          // Card con info giocatore selezionato
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Row(
-                  children: [
-                    // Dati del giocatore: ruolo, nome, squadra
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.viewModel.players[widget.viewModel.selectedPlayer]?.ruolo ?? '-',
-                            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            widget.viewModel.players[widget.viewModel.selectedPlayer]?.nome ?? '-',
-                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            widget.viewModel.players[widget.viewModel.selectedPlayer]?.squadra ?? '-',
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Pulsante in alto a destra
-                    IconButton(
-                      onPressed: () {
-                        widget.viewModel.clearAuction();
-                      },
-                      icon: const Icon(Icons.close, size: 20),
-                    ),
-                    // Pulsante "Aggiudica"
-                    ListenableBuilder(
-                      listenable: widget.viewModel,
-                      builder: (context, _) {
-                        return FilledButton(
-                          onPressed: (widget.viewModel.currentBet > 0 &&
-                              widget.viewModel.selectedPlayer.isNotEmpty &&
-                              widget.viewModel.selectedManager.isNotEmpty)
-                              ? () {
-                            widget.viewModel.addPlayer.execute();
-                          }
-                              : null,
-                          child: const Text('Aggiudica'),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // BetPanel
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ListenableBuilder(
-              listenable: widget.viewModel,
-              builder: (context, _) {
-                return BetPanel(
-                  bet: widget.viewModel.currentBet,
-                  onBetChanged: (value) => widget.viewModel.setBet(value),
-                );
-              },
-            ),
+          // AuctionPanel sempre visibile, con placeholder quando nessun giocatore selezionato
+          ListenableBuilder(
+            listenable: widget.viewModel,
+            builder: (context, _) {
+              final selectedKey = widget.viewModel.selectedPlayer;
+              final Player player = widget.viewModel.players[selectedKey] ??
+                  Player(id: 0, nome: '-', squadra: '-', ruolo: '-', quotAttuale: 0);
+              return AuctionPanel(
+                player: player,
+                bet: widget.viewModel.currentBet,
+                onBetChanged: widget.viewModel.setBet,
+                clearAuction: widget.viewModel.clearAuction,
+                onAggiudica: widget.viewModel.addPlayer.execute,
+                canAggiudica: widget.viewModel.currentBet > 0 &&
+                    widget.viewModel.selectedPlayer.isNotEmpty &&
+                    widget.viewModel.selectedManager.isNotEmpty,
+              );
+            },
           ),
 
           const SizedBox(height: 8),

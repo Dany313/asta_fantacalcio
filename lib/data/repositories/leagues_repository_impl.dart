@@ -59,8 +59,8 @@ class LeaguesRepositoryImpl implements LegheRepository, ManagersRepository, Auct
   }
 
   @override
-  Future<Either> removePlayerFromManager(String leagueName, String managerName, String playerName) async{
-    return await serviceLocator<LeaguesService>().removePlayerFromManager(leagueName, managerName, playerName);
+  Future<Either> removePlayerFromManager(String leagueName, String managerName, String playerName, String playerRole) async{
+    return await serviceLocator<LeaguesService>().removePlayerFromManager(leagueName, managerName, playerName, playerRole);
   }
 
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../core/utils/command.dart';
 import '../../domain/entities/manager.dart';
-import 'ManagerRecap.dart';
+import 'manager_recap.dart';
 import 'circular_delete_button.dart';
 
 class AllenatoreWidget extends StatelessWidget {
@@ -31,7 +31,7 @@ class AllenatoreWidget extends StatelessWidget {
               fontSize: 30
             ),),
             if(!isAuction)
-            CircularDeleteButton()
+            CircularDeleteButton(delete: deletePartecipante, deleteParam: partecipante.nome,)
           ],
         ),
         subtitle: ManagerRecap(
