@@ -1,10 +1,11 @@
+import 'package:asta_fantacalcio/presentation/viewmodels/teams/teams_view_model.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/auction/asta_view_model.dart';
 
 class TeamsPage extends StatefulWidget {
-  const TeamsPage({Key? key, required this.viewModel}) : super(key: key);
+  const TeamsPage({super.key, required this.viewModel});
 
-  final AstaViewModel viewModel;
+  final TeamsViewModel viewModel;
 
   @override
   State<TeamsPage> createState() => _TeamsPageState();
@@ -14,29 +15,19 @@ class _TeamsPageState extends State<TeamsPage> {
   @override
   void initState() {
     super.initState();
-    // Se non c'è già un manager selezionato, prendo il primo
-    if (widget.viewModel.managers.isNotEmpty &&
-        widget.viewModel.selectedManager.isEmpty) {
-      widget.viewModel.selectManager(widget.viewModel.managers[0].nome);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SQUADRE'),
+        title: widget.viewModel.managerName.isNotEmpty ?
+        Text(widget.viewModel.managerName) :
+        Text("SQUADRE"),
       ),
       body: ListenableBuilder(
         listenable: widget.viewModel,
         builder: (context, _) {
-          final managers = widget.viewModel.managers;
-          final selected = widget.viewModel.selectedManagerPlayerList;
-          final currentManager = managers.firstWhere(
-                (m) => m.nome == selected,
-            orElse: () => managers.isNotEmpty ? managers[0] : throw StateError('No managers'),
-          );
-          final playerNames = currentManager.giocatori.keys.toList();
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,16 +38,15 @@ class _TeamsPageState extends State<TeamsPage> {
                 child: ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   scrollDirection: Axis.horizontal,
-                  itemCount: managers.length,
+                  itemCount: widget.viewModel.managers.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 8),
                   itemBuilder: (context, idx) {
-                    final m = managers[idx];
-                    final isSel = m.nome == selected;
+                    final isSel = widget.viewModel.managers.keys.elementAt(idx) == widget.viewModel.selectedManager;
                     return ChoiceChip(
-                      label: Text(m.nome),
+                      label: Text(widget.viewModel.managers.keys.elementAt(idx)),
                       selected: isSel,
                       onSelected: (_) {
-                        widget.viewModel.selectManagerPlayerList(m.nome);
+                        widget.viewModel.selectManager(widget.viewModel.managers.keys.elementAt(idx));
                       },
                     );
                   },
@@ -66,19 +56,19 @@ class _TeamsPageState extends State<TeamsPage> {
 
               // Lista dei giocatori del manager selezionato
               Expanded(
-                child: playerNames.isEmpty
+                child: widget.viewModel.playersToDisplay.isEmpty
                     ? const Center(child: Text('Nessun giocatore'))
                     : ListView.builder(
-                  itemCount: playerNames.length,
+                  itemCount: widget.viewModel.playersToDisplay.length,
                   itemBuilder: (context, i) {
-                    final playerName = playerNames[i];
+                    final player = widget.viewModel.playersToDisplay[i];
                     return ListTile(
-                      title: Text(playerName),
+                      title: Text(player.nome),
                       trailing: IconButton(
                         icon: const Icon(Icons.close),
                         onPressed: () {
                           // Imposto selectedPlayer e chiamo remove
-                          widget.viewModel.removePlayer.execute(currentManager.nome, playerName);
+                          widget.viewModel.removePlayer(widget.viewModel.selectedManager,player.nome);
                         },
                       ),
                     );

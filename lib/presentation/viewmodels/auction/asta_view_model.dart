@@ -9,14 +9,13 @@ import '../../../core/utils/command.dart';
 import '../../../domain/entities/manager.dart';
 import '../../../domain/entities/player.dart';
 import '../../../domain/usecases/auction/add_player_usecase.dart';
-import '../../../domain/usecases/auction/remove_player_usecase.dart';
+import '../../../domain/usecases/teams/remove_player_usecase.dart';
 import '../../../service_locator.dart';
 
 class AstaViewModel extends ChangeNotifier {
   AstaViewModel({required this.leagueName}){
     initAuction = Command0(_initAuction)..execute();
     addPlayer = Command0(_addPlayer);
-    removePlayer = Command2(_removePlayer);
     searchPlayer = Command1(_searchPlayer);
   }
 
@@ -26,7 +25,6 @@ class AstaViewModel extends ChangeNotifier {
 
   late final Command0 initAuction;
   late Command0 addPlayer;
-  late Command2<void,String,String> removePlayer;
   late Command1<void, String> searchPlayer;
 
   List<String> searchPlayerList = [];
@@ -114,25 +112,6 @@ class AstaViewModel extends ChangeNotifier {
     }
   }
 
-
-
-  Future<void> _removePlayer(String manager, String player) async {
-    try {
-      final result = await serviceLocator<RemovePlayerUseCase>().call(leagueName, manager, player);
-      result.fold(
-            (error) => print(error),
-            (success) => print(success),
-      );
-
-      print("Ricaricamento leghe dopo remove...");
-
-      return _initAuction();
-    } finally {
-      print("Notifica ascoltatori");
-      notifyListeners();
-    }
-  }
-
   bool canManagerBuy(index) {
 
     if(currentBet > managers[index].budget - (25 - managers[index].giocatori.length)){
@@ -146,7 +125,7 @@ class AstaViewModel extends ChangeNotifier {
     }
 
     if(selectedPlayer != ''){
-      switch(players[selectedPlayer]!.ruolo) {
+      switch(players[selectedPlayer]?.ruolo) {
         case 'P':  if(managers[index].numP >= 3){
           return false;
       } break;

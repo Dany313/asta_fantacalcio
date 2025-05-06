@@ -1,9 +1,9 @@
 import 'package:asta_fantacalcio/presentation/pages/auction/players_page.dart';
-import 'package:asta_fantacalcio/presentation/pages/auction/teams_page.dart';
+import 'package:asta_fantacalcio/presentation/pages/teams/teams_page.dart';
+import 'package:asta_fantacalcio/presentation/viewmodels/teams/teams_view_model.dart';
 import 'package:flutter/material.dart';
 import '../../viewmodels/auction/asta_view_model.dart';
 import 'auction_page.dart';
-
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key, required this.viewModel});
@@ -15,7 +15,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 1; // Inizializza con l'indice centrale (Asta) selezionato
+  int _selectedIndex =
+      1; // Inizializza con l'indice centrale (Asta) selezionato
 
   @override
   Widget build(BuildContext context) {
@@ -29,14 +30,8 @@ class _MainPageState extends State<MainPage> {
           });
         },
         destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.people),
-            label: 'Squadre',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.gavel),
-            label: 'Asta',
-          ),
+          NavigationDestination(icon: Icon(Icons.people), label: 'Squadre'),
+          NavigationDestination(icon: Icon(Icons.gavel), label: 'Asta'),
           NavigationDestination(
             icon: Icon(Icons.sports_soccer),
             label: 'Giocatori',
@@ -49,9 +44,16 @@ class _MainPageState extends State<MainPage> {
   Widget _buildCurrentPage() {
     switch (_selectedIndex) {
       case 0:
-        return TeamsPage(viewModel: widget.viewModel);
+        return TeamsPage(
+          viewModel: TeamsViewModel(
+            leagueName: widget.viewModel.leagueName,
+            managerName: '',
+          ),
+        );
       case 1:
-        return AuctionPage(viewModel: widget.viewModel);
+        return AuctionPage(viewModel: AstaViewModel(
+            leagueName: widget.viewModel.leagueName)
+        );
       case 2:
         return PlayersPage(viewModel: widget.viewModel);
       default:

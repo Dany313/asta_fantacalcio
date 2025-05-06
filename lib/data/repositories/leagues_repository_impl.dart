@@ -63,5 +63,4 @@ class LeaguesRepositoryImpl implements LegheRepository, ManagersRepository, Auct
     return await serviceLocator<LeaguesService>().removePlayerFromManager(leagueName, managerName, playerName, playerRole);
   }
 
-
 }

@@ -61,10 +61,15 @@ class _ManagersViewState extends State<ManagersView> {
               final partecipante = widget.viewModel.managers[index];
               return Column(
                 children: [
-                  AllenatoreWidget(
-                      partecipante: partecipante,
-                      deletePartecipante: widget.viewModel.removeManager, isAuction: false,
-                                ),
+                  GestureDetector(
+                    onTap: () {
+                      context.push(Routes.teamWithManager(widget.viewModel.leagueName,partecipante.nome));
+                    },
+                    child: AllenatoreWidget(
+                        partecipante: partecipante,
+                        deletePartecipante: widget.viewModel.removeManager, isAuction: false,
+                                  ),
+                  ),
                 ],
               );
             },

@@ -7,4 +7,6 @@ abstract class PlayersService {
   Future<Either> getPlayerActualValue(String playerName);
   Future<bool> isPlayerPresent(String playerName);
   Future<Either> searchPlayer(String substring);
+  Future<Either> getPlayersFromList(List<String> players);
+
 }

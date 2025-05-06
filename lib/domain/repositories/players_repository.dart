@@ -7,4 +7,5 @@ abstract class PlayersRepository {
   Future<Either> getPLayerRole(String playerName);
   Future<Either> getPlayerActualValue(String playerName);
   Future<bool> isPlayerPresent(String playerName);
+  Future<Either> getPlayersFromList(List<String> players);
 }

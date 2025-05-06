@@ -34,4 +34,9 @@ class PlayersRepositoryImpl implements PlayersRepository {
   Future<Either> searchPlayer(String substring) async{
     return await serviceLocator<PlayersService>().searchPlayer(substring);
   }
+
+  @override
+  Future<Either> getPlayersFromList(List<String> players) async {
+    return await serviceLocator<PlayersService>().getPlayersFromList(players);
+  }
 }

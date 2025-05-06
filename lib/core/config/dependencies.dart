@@ -1,5 +1,5 @@
 import 'package:asta_fantacalcio/domain/repositories/auction_repository.dart';
-import 'package:asta_fantacalcio/domain/usecases/auction/remove_player_usecase.dart';
+import 'package:asta_fantacalcio/domain/usecases/teams/remove_player_usecase.dart';
 import 'package:asta_fantacalcio/domain/usecases/auction/search_player_usecase.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
