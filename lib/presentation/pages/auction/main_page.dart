@@ -22,22 +22,44 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _buildCurrentPage(),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.people), label: 'Squadre'),
-          NavigationDestination(icon: Icon(Icons.gavel), label: 'Asta'),
-          NavigationDestination(
-            icon: Icon(Icons.sports_soccer),
-            label: 'Giocatori',
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            navigationBarTheme: NavigationBarThemeData(
+              labelTextStyle: MaterialStateProperty.all(
+                const TextStyle(color: Colors.white),
+              ),
+            ),
           ),
-        ],
-      ),
+          child: NavigationBar(
+            backgroundColor: const Color(0xFF320099),
+            indicatorColor: Colors.white.withOpacity(0.2),
+            surfaceTintColor: Colors.transparent,
+            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (int index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.people, color: Colors.white70),
+                selectedIcon: Icon(Icons.people, color: Colors.white),
+                label: 'Squadre',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.gavel, color: Colors.white70),
+                selectedIcon: Icon(Icons.gavel, color: Colors.white),
+                label: 'Asta',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.sports_soccer, color: Colors.white70),
+                selectedIcon: Icon(Icons.sports_soccer, color: Colors.white),
+                label: 'Giocatori',
+              ),
+            ],
+          ),
+        )
     );
   }
 

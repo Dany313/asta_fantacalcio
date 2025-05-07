@@ -36,16 +36,12 @@ class _AuctionPageState extends State<AuctionPage> {
             builder: (context, _) {
               final selectedKey = widget.viewModel.selectedPlayer;
               final Player player = widget.viewModel.players[selectedKey] ??
-                  Player(id: 0, nome: '-', squadra: '-', ruolo: '-', quotAttuale: 0);
+                  Player(id: 0, nome: '', squadra: '', ruolo: '', quotAttuale: 0);
               return AuctionPanel(
                 player: player,
                 bet: widget.viewModel.currentBet,
                 onBetChanged: widget.viewModel.setBet,
                 clearAuction: widget.viewModel.clearAuction,
-                onAggiudica: widget.viewModel.addPlayer,
-                canAggiudica: widget.viewModel.currentBet > 0 &&
-                    widget.viewModel.selectedPlayer.isNotEmpty &&
-                    widget.viewModel.selectedManager.isNotEmpty,
               );
             },
           ),
@@ -89,6 +85,23 @@ class _AuctionPageState extends State<AuctionPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: ListenableBuilder(
+        listenable: widget.viewModel,
+        builder: (context, _) {
+          final canAggiudica = widget.viewModel.currentBet > 0 &&
+              widget.viewModel.selectedPlayer.isNotEmpty &&
+              widget.viewModel.selectedManager.isNotEmpty;
+
+          return canAggiudica
+              ? FloatingActionButton.extended(
+            onPressed: widget.viewModel.addPlayer,
+            backgroundColor: Colors.green,
+            icon: const Icon(Icons.gavel),
+            label: const Text('Aggiudica'),
+          )
+              : const SizedBox.shrink(); // Non mostrare il FAB se non sono soddisfatte le condizioni
+        },
       ),
     );
   }

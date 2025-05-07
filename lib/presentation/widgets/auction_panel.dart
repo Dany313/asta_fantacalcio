@@ -8,8 +8,6 @@ class AuctionPanel extends StatelessWidget {
   final int bet;
   final ValueChanged<int> onBetChanged;
   final VoidCallback clearAuction;
-  final VoidCallback onAggiudica;
-  final bool canAggiudica;
 
   const AuctionPanel({
     super.key,
@@ -17,8 +15,6 @@ class AuctionPanel extends StatelessWidget {
     required this.bet,
     required this.onBetChanged,
     required this.clearAuction,
-    required this.onAggiudica,
-    required this.canAggiudica,
   });
 
   @override
@@ -37,7 +33,7 @@ class AuctionPanel extends StatelessWidget {
               // Title: ruolo e nome
               title: Row(
                 children: [
-                  RoleCircle(player.ruolo),
+                  player.ruolo != '' ? RoleCircle(player.ruolo) : Text("SELEZIONA GIOCATORE"),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -56,18 +52,19 @@ class AuctionPanel extends StatelessWidget {
                 player.squadra,
                 style: const TextStyle(fontSize: 14, color: Colors.white70),
               ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    onPressed: clearAuction,
-                    icon: const Icon(Icons.close, size: 20, color: Colors.white),
-                  ),
-                  FilledButton(
-                    onPressed: canAggiudica ? onAggiudica : null,
-                    child: const Text('Aggiudica'),
-                  ),
-                ],
+              trailing: IconButton(
+                onPressed: clearAuction,
+                iconSize: 16, // dimensione dell’icona interna, a piacere
+                style: ButtonStyle(
+                  // dimensione fissa del bottone
+                  fixedSize: WidgetStateProperty.all(Size(32, 32)),
+                  // oppure, se usi una versione di Flutter più vecchia:
+                  // minimumSize: MaterialStateProperty.all(Size(32, 32)),
+                  backgroundColor: WidgetStateProperty.all(Color(0xFF4200CC)),
+                  foregroundColor: WidgetStateProperty.all(Colors.white),
+                  padding: WidgetStateProperty.all(EdgeInsets.zero), // rimuove padding interno
+                ),
+                icon: Icon(Icons.delete_outline_rounded),
               ),
             ),
           ),
