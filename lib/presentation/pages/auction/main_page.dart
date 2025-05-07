@@ -51,9 +51,8 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       case 1:
-        return AuctionPage(viewModel: AstaViewModel(
-            leagueName: widget.viewModel.leagueName)
-        );
+        widget.viewModel.refreshLeague();
+        return AuctionPage(viewModel: widget.viewModel);
       case 2:
         return PlayersPage(viewModel: widget.viewModel);
       default:

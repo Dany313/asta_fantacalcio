@@ -19,7 +19,7 @@ class _PlayersPageState extends State<PlayersPage> {
     super.initState();
     // Carica la lista dei giocatori all'avvio della pagina
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      widget.viewModel.searchPlayer.execute('');
+      widget.viewModel.filterPlayers('');
     });
   }
 
@@ -60,13 +60,13 @@ class _PlayersPageState extends State<PlayersPage> {
                       icon: const Icon(Icons.clear),
                       onPressed: () {
                         searchController.clear();
-                        widget.viewModel.searchPlayer.execute('');
+                        widget.viewModel.filterPlayers('');
                       },
                     )
                         : null,
                   ),
                   onChanged: (value) {
-                    widget.viewModel.searchPlayer.execute(value);
+                    widget.viewModel.filterPlayers(value);
                     setState(() {}); // Per aggiornare l'icona di cancellazione
                   },
                 ),
@@ -86,7 +86,7 @@ class _PlayersPageState extends State<PlayersPage> {
                           .titleMedium,
                     ),
                     Text(
-                      '${widget.viewModel.searchPlayerList.length} giocatori',
+                      '${widget.viewModel.filteredPlayersList.length} giocatori',
                       style: Theme
                           .of(context)
                           .textTheme
@@ -98,7 +98,7 @@ class _PlayersPageState extends State<PlayersPage> {
 
               // Lista dei giocatori
               Expanded(
-                child: widget.viewModel.searchPlayerList.isEmpty
+                child: widget.viewModel.filteredPlayersList.isEmpty
                     ? Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -125,9 +125,9 @@ class _PlayersPageState extends State<PlayersPage> {
                   ),
                 )
                     : ListView.builder(
-                  itemCount: widget.viewModel.searchPlayerList.length,
+                  itemCount: widget.viewModel.filteredPlayersList.length,
                   itemBuilder: (context, index) {
-                    final player = widget.viewModel.searchPlayerList[index];
+                    final player = widget.viewModel.filteredPlayersList[index];
                     final bool isSelected = player ==
                         widget.viewModel.selectedPlayer;
 

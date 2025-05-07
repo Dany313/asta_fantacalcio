@@ -42,7 +42,7 @@ class _AuctionPageState extends State<AuctionPage> {
                 bet: widget.viewModel.currentBet,
                 onBetChanged: widget.viewModel.setBet,
                 clearAuction: widget.viewModel.clearAuction,
-                onAggiudica: widget.viewModel.addPlayer.execute,
+                onAggiudica: widget.viewModel.addPlayer,
                 canAggiudica: widget.viewModel.currentBet > 0 &&
                     widget.viewModel.selectedPlayer.isNotEmpty &&
                     widget.viewModel.selectedManager.isNotEmpty,
@@ -58,9 +58,9 @@ class _AuctionPageState extends State<AuctionPage> {
               listenable: widget.viewModel,
               builder: (context, _) {
                 return ListView.builder(
-                  itemCount: widget.viewModel.managers.length,
+                  itemCount: widget.viewModel.league.partecipanti.length,
                   itemBuilder: (context, index) {
-                    final manager = widget.viewModel.managers[index];
+                    final manager = widget.viewModel.league.partecipanti[index];
                     final isSelected = widget.viewModel.selectedManager == manager.nome;
                     final canBuy = widget.viewModel.canManagerBuy(index);
                     return GestureDetector(

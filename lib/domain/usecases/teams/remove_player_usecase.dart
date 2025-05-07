@@ -11,14 +11,15 @@ class RemovePlayerUseCase {
 
   Future<Either> call(String leagueName, String managerName, String playerName) async {
     print("Rimuovendo giocatore: $playerName al manager $managerName");
-    late Player player;
-    final result =  await serviceLocator<PlayersRepository>().getPLayer(playerName);
+    String role = '';
+    final result = await serviceLocator<PlayersRepository>().getPLayerRole(playerName);
     result.fold(
           (error) => print(error),
-          (success) => player = success,
+          (success) => role = success,
     );
     return await serviceLocator<AuctionRepository>()
-        .removePlayerFromManager(leagueName, managerName, player.nome, player.ruolo);
+        .removePlayerFromManager(leagueName, managerName, playerName, role);
 
   }
+
 }
